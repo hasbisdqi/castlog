@@ -1,0 +1,1047 @@
+{
+  "source": "Fishing Planet Wiki",
+  "category": "Baits",
+  "total": 0,
+  "products": [],
+  "categories": [
+    {
+      "name": "Common Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Common_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    },
+    {
+      "name": "Worms & Insects Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Worms_%26_Insects_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    },
+    {
+      "name": "Fresh Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Fresh_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    },
+    {
+      "name": "Saltwater Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Saltwater_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    },
+    {
+      "name": "Boilies & Pellets Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Boilies_%26_Pellets_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    },
+    {
+      "name": "Event Baits",
+      "sourceUrl": "https://wiki.fishingplanet.com/Event_Baits/en",
+      "description": [],
+      "locations": [
+        {
+          "name": "Texas",
+          "url": "https://wiki.fishingplanet.com/wiki/Lone_Star_Lake_-_Texas"
+        },
+        {
+          "name": "Missouri",
+          "url": "https://wiki.fishingplanet.com/wiki/Mudwater_River_-_Missouri"
+        },
+        {
+          "name": "New York",
+          "url": "https://wiki.fishingplanet.com/wiki/Emerald_Lake_-_New_York"
+        },
+        {
+          "name": "Colorado",
+          "url": "https://wiki.fishingplanet.com/wiki/Rocky_Lake_-_Colorado"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "North Carolina",
+          "url": "https://wiki.fishingplanet.com/wiki/Neherrin_River_-_North_Carolina"
+        },
+        {
+          "name": "Oregon",
+          "url": "https://wiki.fishingplanet.com/wiki/Falcon_Lake_-_Oregon"
+        },
+        {
+          "name": "Florida",
+          "url": "https://wiki.fishingplanet.com/wiki/Everglades_-_Florida"
+        },
+        {
+          "name": "Alberta",
+          "url": "https://wiki.fishingplanet.com/wiki/White_Moose_Lake_-_Alberta"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "Louisiana",
+          "url": "https://wiki.fishingplanet.com/wiki/Quanchkin_Lake_-_Louisiana"
+        },
+        {
+          "name": "Michigan",
+          "url": "https://wiki.fishingplanet.com/wiki/Saint-Croix_Lake_-_Michigan"
+        },
+        {
+          "name": "California",
+          "url": "https://wiki.fishingplanet.com/wiki/San_Joaquin_Delta_-_California"
+        },
+        {
+          "name": "Alaska",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaniq_Creek_-_Alaska"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Mississippi",
+          "url": "https://wiki.fishingplanet.com/wiki/Blue_Crab_Island_-_Mississippi"
+        },
+        {
+          "name": "Peru",
+          "url": "https://wiki.fishingplanet.com/wiki/Maku-Maku_Lake_-_Peru"
+        },
+        {
+          "name": "Bolivia",
+          "url": "https://wiki.fishingplanet.com/wiki/Marron_River_-_Bolivia"
+        },
+        {
+          "name": "Brazil",
+          "url": "https://wiki.fishingplanet.com/wiki/Amazonian_Maze_-_Brazil"
+        },
+        {
+          "name": "Czech Republic",
+          "url": "https://wiki.fishingplanet.com/wiki/Lesni_Vila_Fishery_-_Czech_Republic"
+        },
+        {
+          "name": "Netherlands",
+          "url": "https://wiki.fishingplanet.com/wiki/Ghent-Terneuzen_Canal_-_Netherlands"
+        },
+        {
+          "name": "Italy",
+          "url": "https://wiki.fishingplanet.com/wiki/Tiber_River_-_Italy"
+        },
+        {
+          "name": "Germany",
+          "url": "https://wiki.fishingplanet.com/wiki/Sander_Baggersee_Lake_-_Germany"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Ukraine",
+          "url": "https://wiki.fishingplanet.com/wiki/Dnipro_River_-_Ukraine"
+        },
+        {
+          "name": "United Kingdom",
+          "url": "https://wiki.fishingplanet.com/wiki/Weeping_Willow_Fishery_-_United_Kingdom"
+        },
+        {
+          "name": "France",
+          "url": "https://wiki.fishingplanet.com/wiki/Creuse_River_-_France"
+        },
+        {
+          "name": "Norway",
+          "url": "https://wiki.fishingplanet.com/wiki/Sk%C3%A5rland_Fjord-Norway"
+        },
+        {
+          "name": "Congo",
+          "url": "https://wiki.fishingplanet.com/wiki/Congo_River_-_Congo"
+        },
+        {
+          "name": "Mongolia",
+          "url": "https://wiki.fishingplanet.com/wiki/Selenge_River_-_Mongolia"
+        },
+        {
+          "name": "Japan",
+          "url": "https://wiki.fishingplanet.com/wiki/Kaiji_No_Ri_-_Japan"
+        },
+        {
+          "name": "Maldives",
+          "url": "https://wiki.fishingplanet.com/wiki/Noomaa_Kuda_Atholhu_-_Maldives"
+        }
+      ],
+      "productCount": 0
+    }
+  ],
+  "sourceDataStatus": "location_maps_only",
+  "normalizationNotes": [
+    "The provided scrape contains regional fishing-location map tables, not bait product records.",
+    "The six category captures have identical table/image/link counts and extracted location sets; this may indicate repeated page content in the source scrape.",
+    "No bait names, images or specifications were invented. Re-scrape each category page if a product catalog is required."
+  ],
+  "categoryCapturesAppearIdentical": true
+}

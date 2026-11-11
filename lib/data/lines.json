@@ -1,0 +1,49 @@
+{
+  "source": "Fishing Planet Wiki",
+  "category": "Lines",
+  "total": 3,
+  "products": [
+    {
+      "id": "monofilament",
+      "name": "Monofilament",
+      "category": "Lines",
+      "subcategory": "Monofilament",
+      "specifications": {
+        "tensileStrength": "Moderate",
+        "stretch": "Moderate",
+        "visibilityInWater": "Moderate",
+        "abrasionResistance": "Good",
+        "buoyancy": "Moderate"
+      }
+    },
+    {
+      "id": "fluorocarbon",
+      "name": "Fluorocarbon",
+      "category": "Lines",
+      "subcategory": "Fluorocarbon",
+      "specifications": {
+        "tensileStrength": "Good",
+        "stretch": "Low",
+        "visibilityInWater": "Nearly invisible",
+        "abrasionResistance": "Very good",
+        "buoyancy": "Low"
+      }
+    },
+    {
+      "id": "braid",
+      "name": "Braid",
+      "category": "Lines",
+      "subcategory": "Braid",
+      "specifications": {
+        "tensileStrength": "Excellent",
+        "stretch": "Nearly absent",
+        "visibilityInWater": "High",
+        "abrasionResistance": "Moderate",
+        "buoyancy": "High"
+      }
+    }
+  ],
+  "normalizationNotes": [
+    "Three line types were normalized from the source comparison table."
+  ]
+}
