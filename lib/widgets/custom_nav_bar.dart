@@ -14,61 +14,41 @@ class CustomNavBar extends StatelessWidget {
     required this._navItems,
     required this._selectedIndex,
     required this.onItemTapped,
-    this.onPlusTapped,
   });
 
   final List<NavItemData> _navItems;
   final int _selectedIndex;
   final ValueChanged<int> onItemTapped;
-  final VoidCallback? onPlusTapped;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 16),
-        child: Row(
-          children: [
-            // Floating Navigation Bar (Home, Map, Profile)
-            Expanded(
-              child: Container(
-                height: 64,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(_navItems.length, (index) {
-                    final isSelected = _selectedIndex == index;
-                    final item = _navItems[index];
-
-                    return NavItem(
-                      index: index,
-                      onItemTapped: onItemTapped,
-                      isSelected: isSelected,
-                      item: item,
-                    );
-                  }),
-                ),
-              ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade200),
+              color: Colors.white,
             ),
-            const SizedBox(width: 8),
-            // Tombol Plus di sebelah kanan
-            GestureDetector(
-              onTap: onPlusTapped,
-              child: Container(
-                width: 64,
-                height: 64,
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.add, color: Colors.white, size: 28),
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(_navItems.length, (index) {
+                final isSelected = _selectedIndex == index;
+                final item = _navItems[index];
+        
+                return NavItem(
+                  index: index,
+                  onItemTapped: onItemTapped,
+                  isSelected: isSelected,
+                  item: item,
+                );
+              }),
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -25,13 +25,12 @@ class NavItem extends StatelessWidget {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2A2A2A) : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
+          color: isSelected ? Colors.black : Colors.transparent,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(item.icon, color: Colors.white, size: 22),
+            Icon(item.icon, color: isSelected ? Colors.white : Colors.black, size: 22),
 
             AnimatedSize(
               duration: const Duration(milliseconds: 300),
