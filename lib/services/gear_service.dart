@@ -56,9 +56,7 @@ class GearService {
   List<GearModel> getLines() {
     if (!Hive.isBoxOpen('gears')) return [];
     return box.values
-        .where((gear) =>
-            gear.category.toLowerCase() == 'lines' ||
-            gear.category.toLowerCase().contains('line'))
+        .where((gear) => gear.category.toLowerCase() == 'lines')
         .toList();
   }
 
@@ -66,19 +64,17 @@ class GearService {
     if (!Hive.isBoxOpen('gears')) return [];
     return box.values
         .where((gear) =>
-            gear.category.toLowerCase().contains('leader') ||
-            gear.subCategory.toLowerCase().contains('leader') ||
-            gear.name.toLowerCase().contains('leader'))
+            gear.category.toLowerCase() != 'rods' &&
+            (gear.subCategory.toLowerCase() == 'leaders' ||
+                gear.category.toLowerCase() == 'rig' &&
+                    gear.name.toLowerCase().contains('leader')))
         .toList();
   }
 
   List<GearModel> getHooks(SetupType type) {
     if (!Hive.isBoxOpen('gears')) return [];
     return box.values
-        .where((gear) =>
-            gear.category.toLowerCase().contains('hook') ||
-            gear.subCategory.toLowerCase().contains('hook') ||
-            gear.name.toLowerCase().contains('hook'))
+        .where((gear) => gear.category.toLowerCase() == 'hooks')
         .toList();
   }
 
@@ -86,13 +82,14 @@ class GearService {
     if (!Hive.isBoxOpen('gears')) return [];
 
     return box.values.where((gear) {
+      if (gear.category.toLowerCase() == 'rods') return false;
+
       final cat = gear.category.toLowerCase();
       final sub = gear.subCategory.toLowerCase();
       final name = gear.name.toLowerCase();
 
       switch (type) {
         case SetupType.float:
-          // Kecualikan alarm / bell / buoys
           if (sub.contains('alarm') ||
               name.contains('bell') ||
               sub.contains('buoy') ||
@@ -100,32 +97,23 @@ class GearService {
             return false;
           }
 
-          return cat.contains('bobber') ||
-              cat.contains('float') ||
+          return cat == 'bobbers and fishing alarm' ||
               sub.contains('bobber') ||
               sub.contains('waggler') ||
-              sub.contains('slider') ||
-              name.contains('bobber') ||
-              name.contains('float') ||
-              name.contains('waggler') ||
-              name.contains('slider');
+              sub.contains('slider');
         case SetupType.feeder:
-          return cat.contains('feeder') ||
-              sub.contains('feeder') ||
-              cat.contains('sinker') ||
-              sub.contains('sinker') ||
-              name.contains('feeder') ||
-              name.contains('sinker');
+          if (cat != 'sinker and feeders') return false;
+          return sub.contains('feeder') || sub.contains('sinker');
         case SetupType.carp:
-          return cat.contains('sinker') ||
-              sub.contains('sinker') ||
-              name.contains('method feeder') ||
-              name.contains('carp sinker') ||
-              name.contains('sinker');
+          if (cat != 'sinker and feeders') return false;
+          return sub.contains('sinker') ||
+              sub.contains('feeder') ||
+              name.contains('flat') ||
+              name.contains('method') ||
+              name.contains('carp');
         case SetupType.spod:
-          return cat.contains('spod') ||
-              sub.contains('spod') ||
-              name.contains('spod');
+          if (cat != 'sinker and feeders') return false;
+          return sub.contains('spod') || name.contains('spod');
         default:
           return false;
       }
@@ -136,19 +124,18 @@ class GearService {
     if (!Hive.isBoxOpen('gears')) return [];
 
     return box.values.where((gear) {
+      if (gear.category.toLowerCase() == 'rods') return false;
+
       final cat = gear.category.toLowerCase();
-      final sub = gear.subCategory.toLowerCase();
 
       switch (type) {
         case SetupType.spinning:
         case SetupType.casting:
-          return cat.contains('lure') || sub.contains('lure');
+          return cat == 'lures';
         case SetupType.spod:
-          return cat.contains('groundbait') ||
-              sub.contains('groundbait') ||
-              gear.name.toLowerCase().contains('spod mix');
+          return cat == 'groundbaits';
         default:
-          return cat.contains('bait') || sub.contains('bait');
+          return cat == 'baits';
       }
     }).toList();
   }
