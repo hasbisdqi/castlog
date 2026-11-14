@@ -92,12 +92,23 @@ class GearService {
 
       switch (type) {
         case SetupType.float:
-          return cat.contains('float') ||
-              sub.contains('float') ||
-              cat.contains('bobber') ||
-              name.contains('float') ||
+          // Kecualikan alarm / bell / buoys
+          if (sub.contains('alarm') ||
+              name.contains('bell') ||
+              sub.contains('buoy') ||
+              name.contains('buoy')) {
+            return false;
+          }
+
+          return cat.contains('bobber') ||
+              cat.contains('float') ||
+              sub.contains('bobber') ||
+              sub.contains('waggler') ||
+              sub.contains('slider') ||
               name.contains('bobber') ||
-              name.contains('wagler');
+              name.contains('float') ||
+              name.contains('waggler') ||
+              name.contains('slider');
         case SetupType.feeder:
           return cat.contains('feeder') ||
               sub.contains('feeder') ||

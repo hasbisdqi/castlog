@@ -10,17 +10,24 @@ class DatasetInitializer {
   static const String baseUrl =
       'https://raw.githubusercontent.com/hasbisdqi/fishingplanet-dataset/main';
 
+  static const int datasetVersion = 2; // Naikkan jika dataset ada update
+
   static Future<void> initialize() async {
+    final metaBox = await Hive.openBox('metadata');
     final fishBox = await Hive.openBox<FishModel>('fish');
     final gearBox = await Hive.openBox<GearModel>('gears');
 
-    if (fishBox.isEmpty) {
+    final int currentVer = metaBox.get('dataset_version', defaultValue: 0);
+
+    if (fishBox.isEmpty || currentVer < datasetVersion) {
       await _downloadFish();
     }
 
-    if (gearBox.isEmpty) {
+    if (gearBox.isEmpty || currentVer < datasetVersion) {
       await _downloadGears();
     }
+
+    await metaBox.put('dataset_version', datasetVersion);
   }
 
   static Future<void> _downloadFish() async {
