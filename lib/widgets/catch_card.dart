@@ -43,8 +43,12 @@ class CatchCard extends StatelessWidget {
                 child: Image.network(
                   item['image'] ?? '',
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.broken_image)),
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    'assets/placeholder/fish.png',
+                    fit: BoxFit.contain,
+                    errorBuilder: (ctx, err, stack) =>
+                        const Center(child: Icon(Icons.broken_image)),
+                  ),
                 ),
               ),
             ),
