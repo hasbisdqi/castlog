@@ -10,12 +10,13 @@ class DatasetInitializer {
   static const String baseUrl =
       'https://raw.githubusercontent.com/hasbisdqi/fishingplanet-dataset/main';
 
-  static const int datasetVersion = 2; // Naikkan jika dataset ada update
+  static const int datasetVersion = 3; // Naikkan jika dataset ada update
 
   static Future<void> initialize() async {
     final metaBox = await Hive.openBox('metadata');
     final fishBox = await Hive.openBox<FishModel>('fish');
     final gearBox = await Hive.openBox<GearModel>('gears');
+    final mapsBox = await Hive.openBox<String>('maps_raw');
 
     final int currentVer = metaBox.get('dataset_version', defaultValue: 0);
 
@@ -27,7 +28,25 @@ class DatasetInitializer {
       await _downloadGears();
     }
 
+    if (mapsBox.isEmpty || currentVer < datasetVersion) {
+      await _downloadMaps();
+    }
+
     await metaBox.put('dataset_version', datasetVersion);
+  }
+
+  static Future<void> _downloadMaps() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/maps.json'),
+    );
+
+    if (response.statusCode != 200) {
+      return; // Fallback graceful
+    }
+
+    final box = Hive.box<String>('maps_raw');
+    await box.clear();
+    await box.put('maps_json', response.body);
   }
 
   static Future<void> _downloadFish() async {

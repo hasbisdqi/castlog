@@ -1,3 +1,4 @@
+import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/layout.dart';
 import 'package:castlog/routes/app_routes.dart';
@@ -7,7 +8,8 @@ import 'package:get/get.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<TackleBoxController>(() => TackleBoxController());
+    Get.lazyPut<TackleBoxController>(() => TackleBoxController(), fenix: true);
+    Get.lazyPut<SessionController>(() => SessionController(), fenix: true);
   }
 }
 

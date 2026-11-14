@@ -1,13 +1,19 @@
-import 'package:castlog/widgets/catch_card.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/theme/app_colors.dart';
+import 'package:castlog/widgets/catch_card.dart';
+import 'package:castlog/widgets/log_catch_bottom_sheet.dart';
+import 'package:castlog/widgets/start_session_bottom_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sessionController = Get.find<SessionController>();
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -27,15 +33,15 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     _buildHeroHeader(),
                     const SizedBox(height: 38),
-                    _buildCurrentSessionSection(context),
+                    _buildCurrentSessionSection(context, sessionController),
                     const SizedBox(height: 12),
-                    _buildHomeShortcuts(context),
+                    _buildHomeShortcuts(context, sessionController),
                     const SizedBox(height: 36),
-                    _buildStatsRow(),
+                    Obx(() => _buildStatsRow(sessionController)),
                     const SizedBox(height: 38),
                     _buildLocalLeaderboard(context),
                     const SizedBox(height: 38),
-                    _buildRecentCatches(context),
+                    Obx(() => _buildRecentCatches(context, sessionController)),
                   ],
                 ),
               ),
@@ -124,44 +130,133 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrentSessionSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Current session',
-              style: GoogleFonts.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.5,
-                color: AppColors.ink,
+  Widget _buildCurrentSessionSection(
+    BuildContext context,
+    SessionController controller,
+  ) {
+    return Obx(() {
+      final active = controller.activeSession.value;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Current session',
+                style: GoogleFonts.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
+                  color: AppColors.ink,
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Text(
-                'End session',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+              if (active != null)
+                GestureDetector(
+                  onTap: () => controller.endCurrentSession(),
+                  child: Text(
+                    'End session',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          active != null
+              ? _buildActiveSessionCard(context, controller, active)
+              : _buildNoActiveSessionCard(context),
+        ],
+      );
+    });
+  }
+
+  Widget _buildNoActiveSessionCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.paper,
+        border: Border.all(color: AppColors.line),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
                   color: AppColors.muted,
                 ),
               ),
+              const SizedBox(width: 8),
+              Text(
+                'NO ACTIVE EXPEDITION',
+                style: GoogleFonts.dmSans(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.4,
+                  color: AppColors.muted,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Ready to cast?',
+            style: GoogleFonts.manrope(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.8,
+              color: AppColors.ink,
             ),
-          ],
-        ),
-        const SizedBox(height: 15),
-        _buildActiveSessionCard(),
-      ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Pick a waterway, select your multi-rod setup, and start recording your catches in real time.',
+            style: GoogleFonts.dmSans(fontSize: 12, height: 1.5, color: AppColors.muted),
+          ),
+          const SizedBox(height: 18),
+          InkWell(
+            onTap: () => StartSessionBottomSheet.show(context),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              color: AppColors.ink,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Start new session',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  const Icon(Icons.arrow_forward, size: 14, color: Colors.white),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildActiveSessionCard() {
+  Widget _buildActiveSessionCard(
+    BuildContext context,
+    SessionController controller,
+    dynamic active,
+  ) {
     return Container(
-      height: 285,
+      height: 295,
       decoration: BoxDecoration(
         color: AppColors.dark,
         borderRadius: BorderRadius.circular(5),
@@ -169,39 +264,26 @@ class HomeScreen extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
+          // Background Image
           Positioned.fill(
             child: ColorFiltered(
               colorFilter: const ColorFilter.matrix(<double>[
-                0.2126,
-                0.7152,
-                0.0722,
-                0,
-                0,
-                0.2126,
-                0.7152,
-                0.0722,
-                0,
-                0,
-                0.2126,
-                0.7152,
-                0.0722,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
+                0.2126, 0.7152, 0.0722, 0, 0,
+                0.2126, 0.7152, 0.0722, 0, 0,
+                0.2126, 0.7152, 0.0722, 0, 0,
+                0, 0, 0, 1, 0,
               ]),
               child: Image.network(
-                'https://wiki.fishingplanet.com/images/5/56/LoneStarLake.jpg',
+                active.waterwayImage,
                 headers: const {'User-Agent': 'Mozilla/5.0'},
                 fit: BoxFit.cover,
                 errorBuilder: (_, _, _) =>
-                    Container(color: const Color.fromRGBO(226, 226, 80, 1)),
+                    Container(color: const Color(0xFF1A1A1A)),
               ),
             ),
           ),
+
+          // Dark Gradient
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -209,85 +291,119 @@ class HomeScreen extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withValues(alpha: 0.0),
-                    Colors.black.withValues(alpha: 0.12),
-                    Colors.black.withValues(alpha: 0.85),
+                    Colors.black.withValues(alpha: 0.2),
+                    Colors.black.withValues(alpha: 0.4),
+                    Colors.black.withValues(alpha: 0.92),
                   ],
-                  stops: const [0.1, 0.38, 1.0],
+                  stops: const [0.0, 0.4, 1.0],
                 ),
               ),
             ),
           ),
+
+          // Live Pulse Status
           Positioned(
             top: 18,
             left: 19,
             right: 19,
-            child: Text(
-              '●  LIVE SESSION',
-              style: GoogleFonts.dmSans(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.4,
-                color: Colors.white,
-              ),
+            child: Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF22C55E), // Live green
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'LIVE SESSION',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.4,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
+
+          // Session Info & Details
           Positioned(
             bottom: 19,
             left: 19,
-            right: 19,
+            right: 70,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Russia · Emerald Lake',
+                  active.waterwayRegion,
                   style: GoogleFonts.dmSans(
                     fontSize: 11,
-                    color: const Color(0xFFDDDDDD),
+                    color: const Color(0xFFCCCCCC),
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Text(
-                  'Emerald Lake',
+                  active.waterwayName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.manrope(
-                    fontSize: 29,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -1.0,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.8,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 4),
+                Text(
+                  'Loadout: ${active.loadout.name}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.dmSans(
+                    fontSize: 11,
+                    color: const Color(0xFFBBBBBB),
+                  ),
+                ),
+                const SizedBox(height: 14),
                 Container(
-                  padding: const EdgeInsets.only(top: 13),
+                  padding: const EdgeInsets.only(top: 12),
                   decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: Color(0x55FFFFFF))),
+                    border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
                   ),
                   child: Row(
                     children: [
-                      _buildSessionMetaItem('DURATION', '02h 34m'),
+                      Obx(() => _buildSessionMetaItem('DURATION', controller.formattedTimer.value)),
                       const SizedBox(width: 24),
-                      _buildSessionMetaItem('CATCHES', '12 fish'),
+                      _buildSessionMetaItem('CATCHES', '${active.catches.length} fish'),
                     ],
                   ),
                 ),
               ],
             ),
           ),
+
+          // Quick Log Catch Button (+ in circle)
           Positioned(
             right: 18,
             bottom: 18,
-            child: Container(
-              width: 39,
-              height: 39,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: const Icon(
-                Icons.arrow_outward_rounded,
-                color: Color(0xFF111111),
-                size: 20,
+            child: InkWell(
+              onTap: () => LogCatchBottomSheet.show(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: const Icon(
+                  Icons.add,
+                  color: Color(0xFF111111),
+                  size: 24,
+                ),
               ),
             ),
           ),
@@ -321,19 +437,31 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHomeShortcuts(BuildContext context) {
+  Widget _buildHomeShortcuts(
+    BuildContext context,
+    SessionController controller,
+  ) {
     return Row(
       children: [
         Expanded(
           child: _buildSecondaryButton(
-            text: 'All sessions',
-            icon: '↗',
-            onTap: () {},
+            text: '＋ Log catch',
+            onTap: () {
+              if (controller.activeSession.value == null) {
+                StartSessionBottomSheet.show(context);
+              } else {
+                LogCatchBottomSheet.show(context);
+              }
+            },
           ),
         ),
         const SizedBox(width: 9),
         Expanded(
-          child: _buildSecondaryButton(text: '＋ New session', onTap: () {}),
+          child: _buildSecondaryButton(
+            text: 'Change session',
+            icon: '↗',
+            onTap: () => StartSessionBottomSheet.show(context),
+          ),
         ),
       ],
     );
@@ -378,7 +506,13 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow() {
+  Widget _buildStatsRow(SessionController controller) {
+    final totalCatches = controller.catches.length;
+    double maxWeight = 0;
+    for (final c in controller.catches) {
+      if (c.weightKg > maxWeight) maxWeight = c.weightKg;
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 22),
       decoration: const BoxDecoration(
@@ -390,12 +524,22 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _buildStatItem('128', 'Total catches', hasBorder: false),
+            child: _buildStatItem('$totalCatches', 'Total catches', hasBorder: false),
           ),
           Expanded(
-            child: _buildStatItem('18.4 kg', 'Personal best', hasBorder: true),
+            child: _buildStatItem(
+              maxWeight > 0 ? '${maxWeight.toStringAsFixed(1)} kg' : '0.0 kg',
+              'Personal best',
+              hasBorder: true,
+            ),
           ),
-          Expanded(child: _buildStatItem('24', 'Sessions', hasBorder: true)),
+          Expanded(
+            child: _buildStatItem(
+              controller.activeSession.value != null ? '1 Active' : '0 Active',
+              'Sessions',
+              hasBorder: true,
+            ),
+          ),
         ],
       ),
     );
@@ -479,7 +623,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'YOUR REGION · YOGYAKARTA',
+                        'YOUR REGION · NORTH AMERICA',
                         style: GoogleFonts.dmSans(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -525,27 +669,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentCatches(BuildContext context) {
-    final catches = [
-      {
-        'title': 'Common Carp',
-        'sub': 'Emerald Lake · 2 hours ago',
-        'weight': '8.2 kg',
-        'image': 'https://wiki.fishingplanet.com/images/e/e6/Common_Carp.png',
-      },
-      {
-        'title': 'Grass Carp',
-        'sub': 'Emerald Lake · Yesterday',
-        'weight': '6.7 kg',
-        'image': 'https://wiki.fishingplanet.com/images/a/ae/Grass_Carp.png',
-      },
-      {
-        'title': 'Mirror Carp',
-        'sub': 'Lonely Oak · 2 days ago',
-        'weight': '5.1 kg',
-        'image': 'https://wiki.fishingplanet.com/images/0/0d/Mirror_Carp.png',
-      },
-    ];
+  Widget _buildRecentCatches(BuildContext context, SessionController controller) {
+    final list = controller.catches.take(6).map((c) {
+      return {
+        'title': c.species,
+        'sub': '${c.waterway.split(" - ").first} · ${c.rodName}',
+        'weight': c.weightFormatted,
+        'image': c.image ?? '',
+      };
+    }).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -565,7 +697,7 @@ class HomeScreen extends StatelessWidget {
             GestureDetector(
               onTap: () {},
               child: Text(
-                'View all →',
+                'Full journal →',
                 style: GoogleFonts.dmSans(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -575,20 +707,19 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 15),
-
+        const SizedBox(height: 18),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: catches.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Jumlah kolom = 2
-            crossAxisSpacing: 16, // Jarak horizontal antar kartu
-            mainAxisSpacing: 16, // Jarak vertikal antar kartu
-            childAspectRatio: 0.95,
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.82,
           ),
+          itemCount: list.length,
           itemBuilder: (context, index) {
-            return CatchCard(item: catches[index]);
+            return CatchCard(item: list[index]);
           },
         ),
       ],

@@ -1,4 +1,6 @@
+import 'package:castlog/controllers/session_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:castlog/widgets/catch_card.dart';
@@ -15,56 +17,11 @@ class _JournalScreenState extends State<JournalScreen> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  final List<Map<String, String>> _allCatches = [
-    {
-      'title': 'Common Carp',
-      'sub': 'Emerald Lake · Today',
-      'weight': '8.2 kg',
-      'species': 'carp',
-      'image': 'https://wiki.fishingplanet.com/images/e/e6/Common_Carp.png',
-    },
-    {
-      'title': 'Grass Carp',
-      'sub': 'Emerald Lake · Yesterday',
-      'weight': '6.7 kg',
-      'species': 'carp',
-      'image': 'https://wiki.fishingplanet.com/images/a/ae/Grass_Carp.png',
-    },
-    {
-      'title': 'Mirror Carp',
-      'sub': 'Lonely Oak · 2 days ago',
-      'weight': '5.1 kg',
-      'species': 'carp',
-      'image': 'https://wiki.fishingplanet.com/images/0/0d/Mirror_Carp.png',
-    },
-    {
-      'title': 'Largemouth Bass',
-      'sub': 'Lone Star Lake · 4 days ago',
-      'weight': '3.4 kg',
-      'species': 'bass',
-      'image': 'https://wiki.fishingplanet.com/images/5/52/Largemouth_Bass.png',
-    },
-    {
-      'title': 'Common Carp',
-      'sub': 'Emerald Lake · 5 days ago',
-      'weight': '7.3 kg',
-      'species': 'carp',
-      'image': 'https://wiki.fishingplanet.com/images/e/e6/Common_Carp.png',
-    },
-    {
-      'title': 'Bluegill',
-      'sub': 'Lone Star Lake · 1 week ago',
-      'weight': '0.8 kg',
-      'species': 'panfish',
-      'image': 'https://wiki.fishingplanet.com/images/6/6b/Bluegill.png',
-    },
-  ];
-
   final List<Map<String, String>> _filters = [
     {'id': 'all', 'label': 'All catches'},
     {'id': 'carp', 'label': 'Carp'},
     {'id': 'bass', 'label': 'Bass'},
-    {'id': 'recent', 'label': 'Recent'},
+    {'id': 'trout', 'label': 'Trout'},
   ];
 
   @override
@@ -73,25 +30,9 @@ class _JournalScreenState extends State<JournalScreen> {
     super.dispose();
   }
 
-  List<Map<String, String>> get _filteredCatches {
-    return _allCatches.where((item) {
-      final matchesQuery = _searchQuery.isEmpty ||
-          (item['title']?.toLowerCase().contains(_searchQuery.toLowerCase()) ??
-              false) ||
-          (item['sub']?.toLowerCase().contains(_searchQuery.toLowerCase()) ??
-              false);
-
-      if (!matchesQuery) return false;
-
-      if (_selectedFilter == 'all') return true;
-      if (_selectedFilter == 'recent') return true;
-      return (item['species'] ?? '') == _selectedFilter;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final displayedCatches = _filteredCatches;
+    final sessionController = Get.find<SessionController>();
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -117,9 +58,17 @@ class _JournalScreenState extends State<JournalScreen> {
                     const SizedBox(height: 12),
                     _buildFilterPills(),
                     const SizedBox(height: 24),
-                    _buildToolbar(displayedCatches.length),
-                    const SizedBox(height: 16),
-                    _buildCatchGrid(displayedCatches),
+                    Obx(() {
+                      final items = _filterCatches(sessionController);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildToolbar(items.length),
+                          const SizedBox(height: 16),
+                          _buildCatchGrid(items),
+                        ],
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -128,6 +77,27 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
       ),
     );
+  }
+
+  List<Map<String, String>> _filterCatches(SessionController controller) {
+    return controller.catches.where((c) {
+      final matchesQuery = _searchQuery.isEmpty ||
+          c.species.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          c.waterway.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          c.rodName.toLowerCase().contains(_searchQuery.toLowerCase());
+
+      if (!matchesQuery) return false;
+
+      if (_selectedFilter == 'all') return true;
+      return c.species.toLowerCase().contains(_selectedFilter);
+    }).map((c) {
+      return {
+        'title': c.species,
+        'sub': '${c.waterway.split(" - ").first} · ${c.rodName}',
+        'weight': c.weightFormatted,
+        'image': c.image ?? '',
+      };
+    }).toList();
   }
 
   Widget _buildTopBar(BuildContext context) {
@@ -173,7 +143,7 @@ class _JournalScreenState extends State<JournalScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'THE ARCHIVE',
+          'YOUR ARCHIVE',
           style: GoogleFonts.dmSans(
             fontSize: 10,
             fontWeight: FontWeight.w700,
@@ -183,7 +153,7 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
         const SizedBox(height: 10),
         Text(
-          'Your catches.',
+          'Journal.',
           style: GoogleFonts.manrope(
             fontSize: 38,
             fontWeight: FontWeight.w600,
@@ -194,7 +164,7 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
         const SizedBox(height: 10),
         Text(
-          'A collection of moments from every session.',
+          'A permanent, personal record of every single fish brought to hand.',
           style: GoogleFonts.dmSans(
             fontSize: 13,
             height: 1.7,
@@ -211,34 +181,40 @@ class _JournalScreenState extends State<JournalScreen> {
         color: AppColors.paper,
         border: Border.all(color: AppColors.line),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: TextField(
         controller: _searchController,
-        onChanged: (value) {
+        onChanged: (val) {
           setState(() {
-            _searchQuery = value;
+            _searchQuery = val;
           });
         },
-        style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.ink),
+        style: GoogleFonts.dmSans(
+          fontSize: 13,
+          color: AppColors.ink,
+          fontWeight: FontWeight.w500,
+        ),
         decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Search species or location...',
-          hintStyle: GoogleFonts.dmSans(
-            fontSize: 12,
+          hintText: 'Search catches by species, water, rod...',
+          hintStyle: GoogleFonts.dmSans(fontSize: 13, color: AppColors.muted),
+          prefixIcon: const Icon(
+            Icons.search,
+            size: 18,
             color: AppColors.muted,
           ),
-          icon: const Icon(Icons.search, size: 18, color: AppColors.muted),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
-                  icon: const Icon(Icons.close, size: 16),
+                  icon: const Icon(Icons.clear, size: 16),
                   onPressed: () {
                     _searchController.clear();
-                    setState(() {
-                      _searchQuery = '';
-                    });
+                    setState(() => _searchQuery = '');
                   },
                 )
               : null,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 12,
+          ),
         ),
       ),
     );
@@ -259,9 +235,12 @@ class _JournalScreenState extends State<JournalScreen> {
                 });
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.ink : Colors.transparent,
+                  color: isSelected ? AppColors.ink : AppColors.paper,
                   border: Border.all(
                     color: isSelected ? AppColors.ink : AppColors.line,
                   ),
@@ -269,9 +248,9 @@ class _JournalScreenState extends State<JournalScreen> {
                 child: Text(
                   filter['label']!,
                   style: GoogleFonts.dmSans(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: isSelected ? Colors.white : AppColors.muted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected ? Colors.white : AppColors.ink,
                   ),
                 ),
               ),
@@ -282,7 +261,7 @@ class _JournalScreenState extends State<JournalScreen> {
     );
   }
 
-  Widget _buildToolbar(int totalCount) {
+  Widget _buildToolbar(int count) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -297,7 +276,7 @@ class _JournalScreenState extends State<JournalScreen> {
             children: [
               const TextSpan(text: 'All entries '),
               TextSpan(
-                text: '· $totalCount',
+                text: '· $count',
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   color: AppColors.muted,
@@ -306,36 +285,34 @@ class _JournalScreenState extends State<JournalScreen> {
             ],
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.line),
-          ),
-          child: Text(
-            'Newest first ↓',
-            style: GoogleFonts.dmSans(
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              color: AppColors.ink,
-            ),
-          ),
-        ),
       ],
     );
   }
 
   Widget _buildCatchGrid(List<Map<String, String>> catches) {
     if (catches.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Center(
-          child: Text(
-            'No catches found.',
-            style: GoogleFonts.dmSans(
-              fontSize: 13,
-              color: AppColors.muted,
+      return Container(
+        padding: const EdgeInsets.all(32),
+        width: double.infinity,
+        color: AppColors.paper,
+        child: Column(
+          children: [
+            const Icon(Icons.phishing, size: 40, color: AppColors.muted),
+            const SizedBox(height: 10),
+            Text(
+              'No catches found',
+              style: GoogleFonts.manrope(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.ink,
+              ),
             ),
-          ),
+            const SizedBox(height: 4),
+            Text(
+              'Try adjusting your search or filter keywords',
+              style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.muted),
+            ),
+          ],
         ),
       );
     }
@@ -343,13 +320,13 @@ class _JournalScreenState extends State<JournalScreen> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: catches.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.95,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.82,
       ),
+      itemCount: catches.length,
       itemBuilder: (context, index) {
         return CatchCard(item: catches[index]);
       },
