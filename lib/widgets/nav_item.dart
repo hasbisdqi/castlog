@@ -2,7 +2,7 @@ import 'package:castlog/widgets/custom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class NavItem extends StatelessWidget {
-  const new({
+  const NavItem({
     super.key,
     required this.onItemTapped,
     required this.isSelected,
@@ -30,7 +30,11 @@ class NavItem extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(item.icon, color: isSelected ? Colors.white : Colors.black, size: 22),
+            Icon(
+              item.icon,
+              color: isSelected ? Colors.white : Colors.black,
+              size: 22,
+            ),
 
             AnimatedSize(
               duration: const Duration(milliseconds: 300),

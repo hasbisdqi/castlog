@@ -1,137 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:castlog/theme/app_colors.dart';
+import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/models/setup_model.dart';
+import 'package:castlog/routes/app_routes.dart';
+import 'package:castlog/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class TackleBoxScreen extends StatefulWidget {
+class TackleBoxScreen extends StatelessWidget {
   const TackleBoxScreen({super.key});
 
   @override
-  State<TackleBoxScreen> createState() => _TackleBoxScreenState();
-}
-
-class _TackleBoxScreenState extends State<TackleBoxScreen> {
-  final List<LoadoutModel> _loadouts = const [
-    // 1. Emerald Lake Carp & Spod Duo
-    LoadoutModel(
-      id: 'loadout_1',
-      name: 'Emerald Lake Heavy Loadout',
-      rods: [
-        RodSlotData(
-          slotIndex: 1,
-          type: SetupType.carp,
-          rodName: 'UL-CHUBER™ Deep Horizon',
-          rodLength: '4.0 m',
-          rodImage:
-              'https://wiki.fishingplanet.com/images/c/c9/DeepHorizon.png',
-          reel: 'Leviathan 9000',
-          line: 'Braid 0.28 mm',
-          leader: 'Carp Camo 0.35',
-          weightOrFloat: 'Method Feeder 100g',
-          hook: '#4/0 Hair Rig',
-          baitOrLure: 'Boilies Strawberry 20mm',
-        ),
-        RodSlotData(
-          slotIndex: 2,
-          type: SetupType.spod,
-          rodName: 'UL-CHUBER™ Power Launcher Spod',
-          rodLength: '3.6 m',
-          rodImage: 'https://wiki.fishingplanet.com/images/c/cf/5902.png',
-          reel: 'UL-CHUBER™ Griffon Spod',
-          line: 'Braid 0.24 mm',
-          leader: null,
-          weightOrFloat: 'Large Spod Rocket',
-          hook: null,
-          baitOrLure: 'Sweet Corn & Hemp Mix',
-        ),
-      ],
-    ),
-
-    // 2. Spinning & Casting Predator Setup
-    LoadoutModel(
-      id: 'loadout_2',
-      name: 'Predator Hunter Loadout',
-      rods: [
-        RodSlotData(
-          slotIndex: 1,
-          type: SetupType.spinning,
-          rodName: 'MagFin™ JigWinner',
-          rodLength: '2.7 m',
-          rodImage: 'https://wiki.fishingplanet.com/images/c/ce/JigWinner.png',
-          reel: 'Vortex 4000',
-          line: 'Braid 0.18 mm',
-          leader: 'Titanium Leader 0.25',
-          weightOrFloat: null,
-          hook: null,
-          baitOrLure: 'Shad 10 cm + JigHead 14g',
-        ),
-        RodSlotData(
-          slotIndex: 2,
-          type: SetupType.casting,
-          rodName: 'MagFin™ BassCaster',
-          rodLength: '2.2 m',
-          rodImage: 'https://wiki.fishingplanet.com/images/3/35/BassCaster.png',
-          reel: 'Helios 3000 Cast',
-          line: 'Fluoro 0.28 mm',
-          leader: 'Fluorocarbon 0.30',
-          weightOrFloat: null,
-          hook: null,
-          baitOrLure: 'Crankbait Deep Runner 2m',
-        ),
-      ],
-    ),
-
-    // 3. Float, Feeder & Bottom Setup (3 Rods)
-    LoadoutModel(
-      id: 'loadout_3',
-      name: 'Lightwater & River Combo',
-      rods: [
-        RodSlotData(
-          slotIndex: 1,
-          type: SetupType.float,
-          rodName: 'RIVERTEX™ Fenix',
-          rodLength: '3.9 m',
-          rodImage: 'https://wiki.fishingplanet.com/images/f/ff/Fenix.png',
-          reel: 'Espira ML 3500',
-          line: 'Mono 0.20 mm',
-          leader: 'Fluoro 0.16 mm',
-          weightOrFloat: 'Oval Wagler 8g',
-          hook: '#10 Classic Hook',
-          baitOrLure: 'Maggots & Redworm',
-        ),
-        RodSlotData(
-          slotIndex: 2,
-          type: SetupType.feeder,
-          rodName: 'UL-CHUBER™ Big Alli',
-          rodLength: '3.6 m',
-          rodImage: 'https://wiki.fishingplanet.com/images/e/e6/Big_Alli.png',
-          reel: 'Amplus 5000',
-          line: 'Mono 0.25 mm',
-          leader: 'Mono Leader 0.20',
-          weightOrFloat: 'Closed Feeder 60g',
-          hook: '#6 Feeder Hook',
-          baitOrLure: 'Cheese & Dough Paste',
-        ),
-        RodSlotData(
-          slotIndex: 3,
-          type: SetupType.feeder,
-          rodName: 'UL-CHUBER™ Heavy Chaser',
-          rodLength: '3.4 m',
-          rodImage:
-              'https://wiki.fishingplanet.com/images/a/a4/Heavy_Chaser.png',
-          reel: 'Big River 6000',
-          line: 'Braid 0.30 mm',
-          leader: 'Titanium Leader 0.35',
-          weightOrFloat: 'Sinker 150g',
-          hook: '#2/0 Catfish Hook',
-          baitOrLure: 'Cutbait & Large Minnows',
-        ),
-      ],
-    ),
-  ];
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(TackleBoxController());
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -151,9 +32,15 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
                   children: [
                     _buildHeader(),
                     const SizedBox(height: 25),
-                    _buildToolbar(_loadouts.length),
+                    Obx(() => _buildToolbar(controller.loadouts.length, controller)),
                     const SizedBox(height: 18),
-                    ..._loadouts.map((loadout) => _buildLoadoutCard(loadout)),
+                    Obx(
+                      () => Column(
+                        children: controller.loadouts
+                            .map((loadout) => _buildLoadoutCard(loadout, controller))
+                            .toList(),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -239,7 +126,7 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
     );
   }
 
-  Widget _buildToolbar(int count) {
+  Widget _buildToolbar(int count, TackleBoxController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -264,7 +151,10 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            controller.startCreateLoadout();
+            Get.toNamed(AppRoutes.setupForm);
+          },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
             decoration: BoxDecoration(
@@ -284,7 +174,7 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
     );
   }
 
-  Widget _buildLoadoutCard(LoadoutModel loadout) {
+  Widget _buildLoadoutCard(LoadoutModel loadout, TackleBoxController controller) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(18),
@@ -325,7 +215,10 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  controller.startEditLoadout(loadout);
+                  Get.toNamed(AppRoutes.setupForm);
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8, top: 2),
                   child: Text(
@@ -425,15 +318,18 @@ class _TackleBoxScreenState extends State<TackleBoxScreen> {
                           ).createShader(bounds);
                         },
                         blendMode: BlendMode.dstIn,
-                        child: Image.network(
-                          rod.rodImage!,
-                          fit: BoxFit.contain,
-                          headers: const {
-                            'User-Agent':
-                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              const SizedBox.shrink(),
+                        child: RotatedBox(
+                          quarterTurns: 2,
+                          child: Image.network(
+                            rod.rodImage!,
+                            fit: BoxFit.contain,
+                            headers: const {
+                              'User-Agent':
+                                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                            },
+                            errorBuilder: (context, error, stackTrace) =>
+                                const SizedBox.shrink(),
+                          ),
                         ),
                       ),
                     ),

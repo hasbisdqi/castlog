@@ -4,11 +4,7 @@ class CatchCard extends StatelessWidget {
   final Map<String, String> item;
   final VoidCallback? onTap;
 
-  const CatchCard({
-    super.key,
-    required this.item,
-    this.onTap,
-  });
+  const CatchCard({super.key, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +27,7 @@ class CatchCard extends StatelessWidget {
                   return const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black,
-                      Colors.black,
-                      Colors.transparent,
-                    ],
+                    colors: [Colors.black, Colors.black, Colors.transparent],
                     stops: [0.0, 0.55, 0.95],
                   ).createShader(bounds);
                 },
