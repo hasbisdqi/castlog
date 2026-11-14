@@ -224,13 +224,45 @@ class TackleBoxController extends GetxController {
     formRodSlots.refresh();
   }
 
-  void onSlotRodChanged(EditableRodSlot slot, String rodName) {
-    slot.rodName = rodName;
-    final rods = getRods(slot.type);
-    final match = rods.firstWhereOrNull((r) => r.name == rodName);
-    if (match != null) {
-      slot.rodImage = match.image;
+  void onSlotRodChanged(EditableRodSlot slot, GearModel gear) {
+    slot.rodName = gear.name;
+    slot.rodImage = gear.image;
+    // Extract length if present
+    final pattern = RegExp(r"(\d+(\.\d+)?\s*(m|ft|'|" r'"))');
+    final lengthMatch = pattern.firstMatch(gear.description) ?? pattern.firstMatch(gear.name);
+    if (lengthMatch != null) {
+      slot.rodLength = lengthMatch.group(0)!;
     }
+    formRodSlots.refresh();
+  }
+
+  void onSlotReelChanged(EditableRodSlot slot, GearModel gear) {
+    slot.reel = gear.name;
+    formRodSlots.refresh();
+  }
+
+  void onSlotLineChanged(EditableRodSlot slot, GearModel gear) {
+    slot.line = gear.name;
+    formRodSlots.refresh();
+  }
+
+  void onSlotLeaderChanged(EditableRodSlot slot, GearModel? gear) {
+    slot.leader = gear?.name;
+    formRodSlots.refresh();
+  }
+
+  void onSlotWeightOrFloatChanged(EditableRodSlot slot, GearModel? gear) {
+    slot.weightOrFloat = gear?.name;
+    formRodSlots.refresh();
+  }
+
+  void onSlotHookChanged(EditableRodSlot slot, GearModel? gear) {
+    slot.hook = gear?.name;
+    formRodSlots.refresh();
+  }
+
+  void onSlotBaitOrLureChanged(EditableRodSlot slot, GearModel gear) {
+    slot.baitOrLure = gear.name;
     formRodSlots.refresh();
   }
 
