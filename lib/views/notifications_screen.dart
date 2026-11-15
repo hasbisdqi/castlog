@@ -1,7 +1,9 @@
+import 'package:castlog/data/locations.dart';
 import 'package:castlog/services/notification_service.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,6 +23,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   String _quietFrom = '22:00';
   String _quietUntil = '07:00';
+
+  // LBS State (Modul 7)
+  Position? _currentPosition;
+  bool _isLoadingLocation = false;
+  List<Map<String, dynamic>> _locationsWithDistance = [];
 
   // Scheduled notification state (Modul 7)
   DateTime? _scheduledTime;
@@ -73,7 +80,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     Get.snackbar(
       'Preferences Saved',
-      'Your notification preferences have been saved to local storage.',
+      'Notification settings updated',
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: AppColors.paper,
       colorText: AppColors.ink,
@@ -104,6 +111,112 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return '$dateLabel, $hour:$minute';
   }
 
+  String _formatDistance(double meters) {
+    if (meters < 1000) {
+      return '${meters.toStringAsFixed(0)} m';
+    }
+    return '${(meters / 1000).toStringAsFixed(1)} km';
+  }
+
+  Future<void> _checkNearbyLocations() async {
+    setState(() {
+      _isLoadingLocation = true;
+      _locationsWithDistance = [];
+    });
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        Get.snackbar(
+          'GPS Disabled',
+          'Please enable GPS location service on your device.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.paper,
+          colorText: AppColors.ink,
+          borderRadius: 0,
+          borderColor: AppColors.ink,
+          borderWidth: 1,
+          margin: const EdgeInsets.all(16),
+        );
+        setState(() => _isLoadingLocation = false);
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          Get.snackbar(
+            'Permission Denied',
+            'Location permission was denied.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: AppColors.paper,
+            colorText: Colors.red.shade800,
+            borderRadius: 0,
+            borderColor: Colors.red.shade800,
+            borderWidth: 1,
+            margin: const EdgeInsets.all(16),
+          );
+          setState(() => _isLoadingLocation = false);
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        Get.snackbar(
+          'Permission Blocked',
+          'Location permission is permanently denied. Enable it in App Settings.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: AppColors.paper,
+          colorText: Colors.red.shade800,
+          borderRadius: 0,
+          borderColor: Colors.red.shade800,
+          borderWidth: 1,
+          margin: const EdgeInsets.all(16),
+        );
+        setState(() => _isLoadingLocation = false);
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings:
+            const LocationSettings(accuracy: LocationAccuracy.high),
+      );
+
+      final result = dummyLocations.map((loc) {
+        final distance = Geolocator.distanceBetween(
+          position.latitude,
+          position.longitude,
+          loc.lat,
+          loc.lng,
+        );
+        return {'location': loc, 'distance': distance};
+      }).toList();
+
+      result.sort((a, b) =>
+          (a['distance'] as double).compareTo(b['distance'] as double));
+
+      setState(() {
+        _currentPosition = position;
+        _locationsWithDistance = result;
+        _isLoadingLocation = false;
+      });
+    } catch (e) {
+      setState(() => _isLoadingLocation = false);
+      Get.snackbar(
+        'Location Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.paper,
+        colorText: Colors.red.shade800,
+        borderRadius: 0,
+        borderColor: Colors.red.shade800,
+        borderWidth: 1,
+        margin: const EdgeInsets.all(16),
+      );
+    }
+  }
+
   Future<void> _pickDateTime() async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -116,6 +229,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             colorScheme: const ColorScheme.light(
               primary: AppColors.ink,
               onPrimary: Colors.white,
+              surface: AppColors.paper,
               onSurface: AppColors.ink,
             ),
           ),
@@ -123,7 +237,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         );
       },
     );
-
     if (pickedDate == null) return;
     if (!mounted) return;
 
@@ -136,6 +249,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             colorScheme: const ColorScheme.light(
               primary: AppColors.ink,
               onPrimary: Colors.white,
+              surface: AppColors.paper,
               onSurface: AppColors.ink,
             ),
           ),
@@ -143,7 +257,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         );
       },
     );
-
     if (pickedTime == null) return;
 
     setState(() {
@@ -162,56 +275,51 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
-        bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 90),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back Button
-              InkWell(
+              // Top Bar
+              GestureDetector(
                 onTap: () => Get.back(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.arrow_back, size: 14, color: AppColors.muted),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Settings',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.muted,
-                        ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.arrow_back, size: 16, color: AppColors.muted),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Profile',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.muted,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
 
               // Eyebrow
               Text(
-                'PREFERENCES & MODUL 7',
+                'SYSTEM & ALERTS',
                 style: GoogleFonts.dmSans(
-                  fontSize: 10,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 1.8,
+                  letterSpacing: 1.5,
                   color: AppColors.muted,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
 
-              // Page Title
+              // Title
               Text(
                 'Notifications.',
                 style: GoogleFonts.manrope(
-                  fontSize: 38,
-                  fontWeight: FontWeight.w600,
-                  height: 1.13,
-                  letterSpacing: -2.0,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -1.2,
                   color: AppColors.ink,
                 ),
               ),
@@ -272,7 +380,123 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 36),
 
               // ==========================================
-              // SECTION 2: SCHEDULED NOTIFICATIONS
+              // SECTION 2: NEARBY ANGLER HUBS (LBS)
+              // ==========================================
+              _buildSectionTitle('Nearby Angler Hubs (LBS)'),
+              const SizedBox(height: 6),
+              Text(
+                'Calculate precise distances to regional hubs using device GPS. Hubs under 150 meters are flagged in range.',
+                style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.muted, height: 1.4),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  icon: _isLoadingLocation
+                      ? const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.ink,
+                          ),
+                        )
+                      : const Icon(Icons.my_location, size: 16, color: AppColors.ink),
+                  label: Text(
+                    _isLoadingLocation ? 'Acquiring GPS Fix...' : 'Check Nearby Hubs & Distances',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: AppColors.ink),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  ),
+                  onPressed: _isLoadingLocation ? null : _checkNearbyLocations,
+                ),
+              ),
+              if (_currentPosition != null) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  color: AppColors.paper,
+                  child: Text(
+                    'Current GPS: ${_currentPosition!.latitude.toStringAsFixed(5)}, ${_currentPosition!.longitude.toStringAsFixed(5)}',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ..._locationsWithDistance.map((item) {
+                  final loc = item['location'] as LocationData;
+                  final distance = item['distance'] as double;
+                  final isNear = distance < 150;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.paper,
+                      border: Border.all(
+                        color: isNear ? AppColors.ink : AppColors.line,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 18,
+                          color: isNear ? AppColors.ink : AppColors.muted,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            loc.name,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                              fontWeight: isNear ? FontWeight.w700 : FontWeight.w500,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          _formatDistance(distance),
+                          style: GoogleFonts.dmSans(
+                            fontSize: 11,
+                            fontWeight: isNear ? FontWeight.w700 : FontWeight.w500,
+                            color: isNear ? AppColors.ink : AppColors.muted,
+                          ),
+                        ),
+                        if (isNear) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            color: AppColors.ink,
+                            child: Text(
+                              'IN RANGE',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  );
+                }),
+              ],
+              const SizedBox(height: 36),
+
+              // ==========================================
+              // SECTION 3: SCHEDULED NOTIFICATIONS
               // ==========================================
               _buildSectionTitle('Scheduled Session Reminders'),
               const SizedBox(height: 6),
@@ -284,7 +508,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
               // Waterway Picker
               Text(
-                'SELECT WATERWAY',
+                'SELECT WATERWAY OR COMMUNITY HUB',
                 style: GoogleFonts.dmSans(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -303,19 +527,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   child: DropdownButton<String>(
                     isExpanded: true,
                     value: _selectedWaterway,
-                    items: _waterways.map((w) {
-                      return DropdownMenuItem<String>(
-                        value: w,
-                        child: Text(
-                          w,
-                          style: GoogleFonts.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.ink,
+                    items: [
+                      ..._waterways.map((w) {
+                        return DropdownMenuItem<String>(
+                          value: w,
+                          child: Text(
+                            w,
+                            style: GoogleFonts.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.ink,
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }),
+                      ...dummyLocations.map((l) {
+                        return DropdownMenuItem<String>(
+                          value: l.name,
+                          child: Text(
+                            l.name,
+                            style: GoogleFonts.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
                     onChanged: (val) {
                       if (val != null) {
                         setState(() => _selectedWaterway = val);
@@ -419,7 +658,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 36),
 
               // ==========================================
-              // BAGIAN 3: TOGGLES & PREFERENSI (PROTOTYPE)
+              // SECTION 4: TOGGLES & PREFERENCES
               // ==========================================
               _buildSectionTitle('Reminders Preferences'),
               const SizedBox(height: 12),
@@ -515,11 +754,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: GoogleFonts.manrope(
-        fontSize: 16,
+      style: GoogleFonts.dmSans(
+        fontSize: 12,
         fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
-        color: AppColors.ink,
+        letterSpacing: 1.2,
+        color: AppColors.muted,
       ),
     );
   }
@@ -533,7 +772,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.line)),
+        border: Border(
+          bottom: BorderSide(color: AppColors.line),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -546,7 +787,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   title,
                   style: GoogleFonts.manrope(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.ink,
                   ),
                 ),
@@ -576,40 +817,33 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     String value,
     ValueChanged<String> onChanged,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.dmSans(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: AppColors.muted,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.paper,
+        border: Border.all(color: AppColors.line),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.dmSans(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColors.muted,
+            ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: AppColors.paper,
-            border: Border.all(color: AppColors.line),
+          Text(
+            value,
+            style: GoogleFonts.manrope(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: AppColors.ink,
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                value,
-                style: GoogleFonts.dmSans(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.ink,
-                ),
-              ),
-              const Icon(Icons.access_time, size: 16, color: AppColors.muted),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
