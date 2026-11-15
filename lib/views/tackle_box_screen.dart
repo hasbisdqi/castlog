@@ -72,16 +72,19 @@ class TackleBoxScreen extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.soft,
-            border: Border.all(color: AppColors.line),
-            image: const DecorationImage(
-              image: NetworkImage('https://i.pravatar.cc/100?img=12'),
-              fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => Get.toNamed(AppRoutes.profile),
+          child: Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.soft,
+              border: Border.all(color: AppColors.line),
+              image: const DecorationImage(
+                image: NetworkImage('https://i.pravatar.cc/100?img=12'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

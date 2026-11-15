@@ -5,4 +5,8 @@ abstract class AppRoutes {
   static const String activeSession = '/active-session';
   static const String sessionSummary = '/session-summary';
   static const String sessions = '/sessions';
+  static const String profile = '/profile';
+  static const String anglerProfile = '/angler-profile';
+  static const String achievements = '/achievements';
+  static const String notifications = '/notifications';
 }

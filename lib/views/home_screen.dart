@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () => Get.toNamed(AppRoutes.profile),
           child: Container(
             width: 38,
             height: 38,

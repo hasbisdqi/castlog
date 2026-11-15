@@ -1,5 +1,6 @@
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/models/session_model.dart';
+import 'package:castlog/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -115,16 +116,19 @@ class _JournalScreenState extends State<JournalScreen> {
             ],
           ),
         ),
-        Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.soft,
-            border: Border.all(color: AppColors.line),
-            image: const DecorationImage(
-              image: NetworkImage('https://i.pravatar.cc/100?img=12'),
-              fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => Get.toNamed(AppRoutes.profile),
+          child: Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.soft,
+              border: Border.all(color: AppColors.line),
+              image: const DecorationImage(
+                image: NetworkImage('https://i.pravatar.cc/100?img=12'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
