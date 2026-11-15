@@ -409,16 +409,20 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'REGIONAL LEADERBOARD (LBS)',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.2,
-                                color: AppColors.muted,
+                            Expanded(
+                              child: Text(
+                                'REGIONAL LEADERBOARD (LBS)',
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.2,
+                                  color: AppColors.muted,
+                                ),
                               ),
                             ),
-                            if (_detectedCoords != null)
+                            if (_detectedCoords != null) ...[
+                              const SizedBox(width: 8),
                               Text(
                                 _detectedCoords!,
                                 style: GoogleFonts.dmSans(
@@ -427,6 +431,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   color: AppColors.ink,
                                 ),
                               ),
+                            ],
                           ],
                         ),
                         const SizedBox(height: 6),
@@ -536,47 +541,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'MONTHLY LEADERBOARD · SUPABASE',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.2,
-                              color: const Color(0xFFAAAAAA),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: _submitBestCatchToCloud,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              color: Colors.white,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.cloud_upload_outlined,
-                                      size: 12, color: AppColors.ink),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Submit My Catch',
-                                    style: GoogleFonts.dmSans(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.ink,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'MONTHLY LEADERBOARD · SUPABASE',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                          color: const Color(0xFFAAAAAA),
+                        ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
                       Text(
                         'Big fish.\nLocal waters.',
                         style: GoogleFonts.manrope(
@@ -594,6 +568,33 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           fontSize: 11,
                           color: const Color(0xFFC4C4C0),
                           height: 1.6,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: _submitBestCatchToCloud,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.cloud_upload_outlined,
+                                  size: 14, color: AppColors.ink),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Submit Best Catch to Leaderboard',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.ink,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
