@@ -12,4 +12,6 @@ abstract class AppRoutes {
   static const String leaderboard = '/leaderboard';
   static const String rankDetail = '/rank-detail';
   static const String region = '/region';
+  static const String login = '/login';
+  static const String register = '/register';
 }

@@ -1,3 +1,4 @@
+import 'package:castlog/controllers/auth_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/models/session_model.dart';
 import 'package:castlog/routes/app_routes.dart';
@@ -12,6 +13,7 @@ class AnglerProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<SessionController>();
+    final authController = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -59,47 +61,56 @@ class AnglerProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Profile Head
-              Row(
-                children: [
-                  Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.soft,
-                      border: Border.all(color: AppColors.line),
-                      image: const DecorationImage(
-                        image: NetworkImage('https://i.pravatar.cc/150?img=12'),
-                        fit: BoxFit.cover,
+              Obx(() {
+                final user = authController.currentUser.value;
+                final name = (user != null && user.displayName.isNotEmpty)
+                    ? user.displayName
+                    : 'Fishing Journal';
+                final region = controller.userRegion.value;
+
+                return Row(
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.soft,
+                        border: Border.all(color: AppColors.line),
+                        image: DecorationImage(
+                          image: NetworkImage(user?.avatarUrl ??
+                              'https://i.pravatar.cc/150?img=12'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Fishing Journal',
-                          style: GoogleFonts.manrope(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.ink,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: GoogleFonts.manrope(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.ink,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'North America · Angler since 2026',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 12,
-                            color: AppColors.muted,
+                          const SizedBox(height: 4),
+                          Text(
+                            '$region · Angler since 2026',
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                              color: AppColors.muted,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
               const SizedBox(height: 24),
 
               // Page Title

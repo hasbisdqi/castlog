@@ -1,3 +1,4 @@
+import 'package:castlog/controllers/auth_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
@@ -11,6 +12,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<SessionController>();
+    final authController = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -71,59 +73,94 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Profile Head (Clickable to open Angler Profile)
-              InkWell(
-                onTap: () => Get.toNamed(AppRoutes.anglerProfile),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.paper,
-                    border: Border.all(color: AppColors.line),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.soft,
-                          border: Border.all(color: AppColors.line),
-                          image: const DecorationImage(
-                            image: NetworkImage('https://i.pravatar.cc/150?img=12'),
-                            fit: BoxFit.cover,
+              Obx(() {
+                final user = authController.currentUser.value;
+                final name = (user != null && user.displayName.isNotEmpty)
+                    ? user.displayName
+                    : 'Fishing Journal';
+                final isSupabase = authController.isLoggedIn;
+
+                return InkWell(
+                  onTap: () => Get.toNamed(AppRoutes.anglerProfile),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.paper,
+                      border: Border.all(color: AppColors.line),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.soft,
+                            border: Border.all(color: AppColors.line),
+                            image: DecorationImage(
+                              image: NetworkImage(user?.avatarUrl ??
+                                  'https://i.pravatar.cc/150?img=12'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Fishing Journal',
-                              style: GoogleFonts.manrope(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.ink,
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: GoogleFonts.manrope(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.ink,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'View angler profile ↗',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.muted,
+                              const SizedBox(height: 3),
+                              Text(
+                                user?.email ?? 'guest@castlog.local',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 11,
+                                  color: AppColors.muted,
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: isSupabase
+                                      ? const Color(0xFFE8F5E9)
+                                      : AppColors.soft,
+                                  border: Border.all(
+                                    color: isSupabase
+                                        ? const Color(0xFF81C784)
+                                        : AppColors.line,
+                                  ),
+                                ),
+                                child: Text(
+                                  isSupabase
+                                      ? '● Supabase Cloud'
+                                      : '○ Guest Mode',
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: isSupabase
+                                        ? const Color(0xFF2E7D32)
+                                        : AppColors.muted,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 24),
 
               // Stats Row
@@ -164,9 +201,15 @@ class ProfileScreen extends StatelessWidget {
               // Preferences Section
               _buildSectionHeader('Preferences'),
               const SizedBox(height: 10),
+              Obx(() => _buildSettingsRow(
+                    title: 'Account',
+                    value: authController.isLoggedIn
+                        ? authController.currentUser.value!.email
+                        : 'Guest · Not signed in',
+                  )),
               _buildSettingsRow(
-                title: 'Display name',
-                value: 'Fishing Journal',
+                title: 'Cloud sync',
+                value: 'Supabase PostgreSQL',
               ),
               _buildSettingsRow(
                 title: 'Weight unit',
@@ -187,12 +230,70 @@ class ProfileScreen extends StatelessWidget {
               ),
               _buildSettingsRow(
                 title: 'Data & backup',
-                value: 'Local storage (Hive)',
+                value: 'Local storage (Hive) + Cloud',
               ),
               _buildSettingsRow(
                 title: 'About CastLog',
                 value: 'Version 1.0',
               ),
+              const SizedBox(height: 28),
+
+              // Auth Action Button (Sign in / Sign out)
+              Obx(() {
+                if (authController.isLoggedIn) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () => authController.signOut(),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.red.shade800,
+                        side: BorderSide(color: Colors.red.shade200),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                      child: Text(
+                        'Sign out of Supabase',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Get.toNamed(AppRoutes.login),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.dark,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Sign in with Supabase',
+                            style: GoogleFonts.dmSans(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Text('↗', style: TextStyle(fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              }),
               const SizedBox(height: 24),
 
               // Notice

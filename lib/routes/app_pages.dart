@@ -1,3 +1,4 @@
+import 'package:castlog/controllers/auth_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/layout.dart';
@@ -7,10 +8,12 @@ import 'package:castlog/views/active_session_screen.dart';
 import 'package:castlog/views/angler_profile_screen.dart';
 import 'package:castlog/views/catch_detail_screen.dart';
 import 'package:castlog/views/leaderboard_screen.dart';
+import 'package:castlog/views/login_screen.dart';
 import 'package:castlog/views/notifications_screen.dart';
 import 'package:castlog/views/profile_screen.dart';
 import 'package:castlog/views/rank_detail_screen.dart';
 import 'package:castlog/views/region_screen.dart';
+import 'package:castlog/views/register_screen.dart';
 import 'package:castlog/views/session_summary_screen.dart';
 import 'package:castlog/views/sessions_screen.dart';
 import 'package:castlog/views/setup_form_screen.dart';
@@ -19,6 +22,7 @@ import 'package:get/get.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
     Get.lazyPut<TackleBoxController>(() => TackleBoxController(), fenix: true);
     Get.lazyPut<SessionController>(() => SessionController(), fenix: true);
   }
@@ -78,6 +82,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.region,
       page: () => const RegionScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.login,
+      page: () => const LoginScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.register,
+      page: () => const RegisterScreen(),
     ),
   ];
 }
