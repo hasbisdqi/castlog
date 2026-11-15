@@ -301,6 +301,7 @@ class _StartSessionBottomSheetState extends State<StartSessionBottomSheet> {
                         loadout: _selectedLoadout!,
                       );
                       Get.back();
+                      Get.toNamed(AppRoutes.activeSession);
                     },
                     child: Container(
                       width: double.infinity,

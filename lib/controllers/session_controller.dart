@@ -12,6 +12,12 @@ class SessionController extends GetxController {
   // Observable active session
   final Rx<SessionModel?> activeSession = Rx<SessionModel?>(null);
 
+  // Observable past sessions history
+  final RxList<SessionModel> pastSessions = <SessionModel>[].obs;
+
+  // Observable last completed session (for summary)
+  final Rx<SessionModel?> lastCompletedSession = Rx<SessionModel?>(null);
+
   // Observable recent catches list (global across app)
   final RxList<CatchModel> catches = <CatchModel>[].obs;
 
@@ -136,13 +142,17 @@ class SessionController extends GetxController {
     _startTimer();
   }
 
-  void endCurrentSession() {
-    if (activeSession.value == null) return;
-    activeSession.value!.endTime = DateTime.now();
-    activeSession.value!.isActive = false;
+  SessionModel? endCurrentSession() {
+    final session = activeSession.value;
+    if (session == null) return null;
+    session.endTime = DateTime.now();
+    session.isActive = false;
     _timer?.cancel();
+    pastSessions.insert(0, session);
+    lastCompletedSession.value = session;
     activeSession.value = null;
     formattedTimer.value = '00:00';
+    return session;
   }
 
   void addCatch({

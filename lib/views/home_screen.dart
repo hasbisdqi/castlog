@@ -1,4 +1,5 @@
 import 'package:castlog/controllers/session_controller.dart';
+import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:castlog/widgets/catch_card.dart';
 import 'package:castlog/widgets/log_catch_bottom_sheet.dart';
@@ -153,16 +154,33 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               if (active != null)
-                GestureDetector(
-                  onTap: () => controller.endCurrentSession(),
-                  child: Text(
-                    'End session',
-                    style: GoogleFonts.dmSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.muted,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(AppRoutes.activeSession),
+                      child: Text(
+                        'Open →',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.ink,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 14),
+                    GestureDetector(
+                      onTap: () => _confirmEndSession(context, controller, active),
+                      child: Text(
+                        'End session',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.muted,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
             ],
           ),
@@ -255,154 +273,217 @@ class HomeScreen extends StatelessWidget {
     SessionController controller,
     dynamic active,
   ) {
-    return Container(
-      height: 295,
-      decoration: BoxDecoration(
-        color: AppColors.dark,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(<double>[
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0, 0, 0, 1, 0,
-              ]),
-              child: Image.network(
-                active.waterwayImage,
-                headers: const {'User-Agent': 'Mozilla/5.0'},
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) =>
-                    Container(color: const Color(0xFF1A1A1A)),
-              ),
-            ),
-          ),
-
-          // Dark Gradient
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.2),
-                    Colors.black.withValues(alpha: 0.4),
-                    Colors.black.withValues(alpha: 0.92),
-                  ],
-                  stops: const [0.0, 0.4, 1.0],
+    return InkWell(
+      onTap: () => Get.toNamed(AppRoutes.activeSession),
+      child: Container(
+        height: 295,
+        decoration: BoxDecoration(
+          color: AppColors.dark,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: ColorFiltered(
+                colorFilter: const ColorFilter.matrix(<double>[
+                  0.2126, 0.7152, 0.0722, 0, 0,
+                  0.2126, 0.7152, 0.0722, 0, 0,
+                  0.2126, 0.7152, 0.0722, 0, 0,
+                  0, 0, 0, 1, 0,
+                ]),
+                child: Image.network(
+                  active.waterwayImage,
+                  headers: const {'User-Agent': 'Mozilla/5.0'},
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) =>
+                      Container(color: const Color(0xFF1A1A1A)),
                 ),
               ),
             ),
-          ),
 
-          // Live Pulse Status
-          Positioned(
-            top: 18,
-            left: 19,
-            right: 19,
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
+            // Dark Gradient
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.2),
+                      Colors.black.withValues(alpha: 0.4),
+                      Colors.black.withValues(alpha: 0.92),
+                    ],
+                    stops: const [0.0, 0.4, 1.0],
+                  ),
+                ),
+              ),
+            ),
+
+            // Live Pulse Status
+            Positioned(
+              top: 18,
+              left: 19,
+              right: 19,
+              child: Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFF22C55E), // Live green
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'LIVE SESSION',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.4,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Session Info & Details
+            Positioned(
+              bottom: 19,
+              left: 19,
+              right: 70,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    active.waterwayRegion,
+                    style: GoogleFonts.dmSans(
+                      fontSize: 11,
+                      color: const Color(0xFFCCCCCC),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    active.waterwayName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.8,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Loadout: ${active.loadout.name}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.dmSans(
+                      fontSize: 11,
+                      color: const Color(0xFFBBBBBB),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.only(top: 12),
+                    decoration: const BoxDecoration(
+                      border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
+                    ),
+                    child: Row(
+                      children: [
+                        Obx(() => _buildSessionMetaItem('DURATION', controller.formattedTimer.value)),
+                        const SizedBox(width: 24),
+                        _buildSessionMetaItem('CATCHES', '${active.catches.length} fish'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Quick Log Catch Button (+ in circle)
+            Positioned(
+              right: 18,
+              bottom: 18,
+              child: InkWell(
+                onTap: () => LogCatchBottomSheet.show(context),
+                child: Container(
+                  width: 44,
+                  height: 44,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFF22C55E), // Live green
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'LIVE SESSION',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.4,
                     color: Colors.white,
                   ),
+                  child: const Icon(
+                    Icons.add,
+                    color: Color(0xFF111111),
+                    size: 24,
+                  ),
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _confirmEndSession(
+    BuildContext context,
+    SessionController controller,
+    dynamic active,
+  ) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.paper,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        title: Text(
+          'End session?',
+          style: GoogleFonts.manrope(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.ink,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to end your session at ${active.waterwayName}? A summary of all your catches will be generated.',
+          style: GoogleFonts.dmSans(fontSize: 13, height: 1.5, color: AppColors.muted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Keep fishing',
+              style: GoogleFonts.dmSans(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.muted,
+              ),
             ),
           ),
-
-          // Session Info & Details
-          Positioned(
-            bottom: 19,
-            left: 19,
-            right: 70,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  active.waterwayRegion,
-                  style: GoogleFonts.dmSans(
-                    fontSize: 11,
-                    color: const Color(0xFFCCCCCC),
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  active.waterwayName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.manrope(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.8,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Loadout: ${active.loadout.name}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.dmSans(
-                    fontSize: 11,
-                    color: const Color(0xFFBBBBBB),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Container(
-                  padding: const EdgeInsets.only(top: 12),
-                  decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
-                  ),
-                  child: Row(
-                    children: [
-                      Obx(() => _buildSessionMetaItem('DURATION', controller.formattedTimer.value)),
-                      const SizedBox(width: 24),
-                      _buildSessionMetaItem('CATCHES', '${active.catches.length} fish'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Quick Log Catch Button (+ in circle)
-          Positioned(
-            right: 18,
-            bottom: 18,
-            child: InkWell(
-              onTap: () => LogCatchBottomSheet.show(context),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
+          InkWell(
+            onTap: () {
+              Navigator.pop(ctx);
+              final endedSession = controller.endCurrentSession();
+              if (endedSession != null) {
+                Get.toNamed(AppRoutes.sessionSummary, arguments: endedSession);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              color: AppColors.ink,
+              child: Text(
+                'End & View Summary ↗',
+                style: GoogleFonts.dmSans(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
                   color: Colors.white,
-                ),
-                child: const Icon(
-                  Icons.add,
-                  color: Color(0xFF111111),
-                  size: 24,
                 ),
               ),
             ),
