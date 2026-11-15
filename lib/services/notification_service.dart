@@ -43,7 +43,7 @@ class NotificationService {
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       'reminder_channel',
       'Reminder Notifications',
-      description: 'Channel untuk reminder dan alert notifikasi CastLog',
+      description: 'Channel for CastLog reminder and alert notifications',
       importance: Importance.high,
     );
     await androidPlatform?.createNotificationChannel(channel);
@@ -113,7 +113,7 @@ class NotificationService {
     );
   }
 
-  /// Helper: Notifikasi saat ikan berhasil dicatat ke game
+  /// Helper: Catch recorded alert notification
   Future<void> showCatchNotification({
     required String species,
     required double weightKg,
@@ -122,22 +122,22 @@ class NotificationService {
   }) async {
     if (isPersonalBest) {
       await showInstantNotification(
-        title: '🏆 Personal Best Baru!',
-        body: 'Strike luar biasa! $species seberat ${weightKg.toStringAsFixed(2)} kg di $waterway.',
+        title: 'New Personal Best!',
+        body: 'Superb catch! $species weighing ${weightKg.toStringAsFixed(2)} kg at $waterway.',
       );
     } else {
       await showInstantNotification(
-        title: '🎣 Strike! $species',
-        body: '$species (${weightKg.toStringAsFixed(2)} kg) berhasil dicatat ke sesi $waterway.',
+        title: 'Strike: $species',
+        body: '$species (${weightKg.toStringAsFixed(2)} kg) recorded in active session at $waterway.',
       );
     }
   }
 
-  /// Helper: Notifikasi saat sesi mancing dimulai
+  /// Helper: Session started alert notification
   Future<void> showSessionStartedNotification({required String waterway}) async {
     await showInstantNotification(
-      title: '🎣 Sesi Mancing Dimulai',
-      body: 'Sesi aktif di $waterway telah berjalan. Buka game Fishing Planet dan pantau strike!',
+      title: 'Fishing Session Started',
+      body: 'Active session at $waterway has begun. Monitor your lines in Fishing Planet!',
     );
   }
 }

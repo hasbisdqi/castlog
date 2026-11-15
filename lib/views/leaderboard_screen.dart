@@ -139,8 +139,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       await _loadSupabaseLeaderboard();
 
       Get.snackbar(
-        'LBS Terdeteksi 📍',
-        'Koordinat: ${loc.displayCoordinates}\nWilayah: ${loc.formattedRegion}',
+        'Location Detected',
+        'Coordinates: ${loc.displayCoordinates}\nRegion: ${loc.formattedRegion}',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.paper,
         colorText: AppColors.ink,
@@ -152,7 +152,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       );
     } catch (e) {
       Get.snackbar(
-        'Gagal Deteksi Lokasi',
+        'Location Detection Failed',
         e.toString().replaceAll('Exception: ', ''),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.paper,
@@ -171,8 +171,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     final catches = _sessionController.catches;
     if (catches.isEmpty) {
       Get.snackbar(
-        'Belum Ada Tangkapan',
-        'Catat ikan terlebih dahulu di Active Session / Journal.',
+        'No Catches Recorded',
+        'Log a catch first in Active Session or Journal.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.paper,
         colorText: AppColors.ink,
@@ -223,8 +223,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         if (success) {
           await _loadSupabaseLeaderboard();
           Get.snackbar(
-            'Berhasil Dikirim ke Cloud! ☁️',
-            '${best.species} (${best.weightKg.toStringAsFixed(1)} kg) kini tampil di Leaderboard Supabase.',
+            'Submitted to Cloud',
+            '${best.species} (${best.weightKg.toStringAsFixed(1)} kg) is now live on Supabase Leaderboard.',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: AppColors.paper,
             colorText: AppColors.ink,
@@ -235,8 +235,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           );
         } else {
           Get.snackbar(
-            'Gagal Mengirim',
-            'Cek koneksi internet dan coba lagi.',
+            'Submission Failed',
+            'Please check your internet connection and try again.',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: AppColors.paper,
             colorText: Colors.red.shade800,
@@ -480,7 +480,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                       )
                                     : const Icon(Icons.my_location, size: 14, color: AppColors.ink),
                                 label: Text(
-                                  _isDetectingGps ? 'GPS...' : 'Deteksi LBS',
+                                  _isDetectingGps ? 'GPS...' : 'Detect GPS',
                                   style: GoogleFonts.dmSans(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600,
@@ -512,7 +512,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   ),
                                 ),
                                 child: Text(
-                                  'Ganti Wilayah',
+                                  'Change Region',
                                   style: GoogleFonts.dmSans(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600,
@@ -706,7 +706,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             size: 32, color: AppColors.muted),
                         const SizedBox(height: 10),
                         Text(
-                          'Belum Ada Angler di Region Ini',
+                          'No Anglers in This Region Yet',
                           style: GoogleFonts.manrope(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -715,7 +715,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Jadilah pemancing pertama yang mengirimkan tangkapan terbesar!',
+                          'Be the first angler to record and submit a catch in this region!',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.dmSans(
                             fontSize: 12,

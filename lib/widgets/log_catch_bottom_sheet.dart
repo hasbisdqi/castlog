@@ -571,13 +571,20 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
                   ),
                   GestureDetector(
                     onTap: _showImagePickerModal,
-                    child: Text(
-                      'Change photo ↗',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.muted,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Change photo',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.arrow_forward, size: 11, color: AppColors.muted),
+                      ],
                     ),
                   ),
                 ],

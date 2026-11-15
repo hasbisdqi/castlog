@@ -63,7 +63,7 @@ class DatasetInitializer {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Gagal mengunduh fish dataset');
+      throw Exception('Failed to download fish dataset');
     }
 
     final List<dynamic> jsonData = jsonDecode(response.body);
@@ -84,7 +84,7 @@ class DatasetInitializer {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Gagal mengunduh gear dataset');
+      throw Exception('Failed to download gear dataset');
     }
 
     final List<dynamic> jsonData = jsonDecode(response.body);

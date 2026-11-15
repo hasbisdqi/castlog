@@ -30,19 +30,19 @@ class LocationService {
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Layanan lokasi (GPS) tidak aktif. Mohon aktifkan GPS perangkat Anda.');
+      throw Exception('Location services are disabled. Please enable GPS on your device.');
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception('Izin akses lokasi ditolak.');
+        throw Exception('Location permission was denied.');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception('Izin akses lokasi ditolak secara permanen. Mohon aktifkan izin lewat Pengaturan Aplikasi.');
+      throw Exception('Location permission is permanently denied. Please enable it in App Settings.');
     }
 
     return await Geolocator.getCurrentPosition(

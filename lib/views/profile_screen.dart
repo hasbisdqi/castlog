@@ -174,13 +174,20 @@ class ProfileScreen extends StatelessWidget {
                   _buildSectionHeader('Community'),
                   GestureDetector(
                     onTap: () => Get.toNamed(AppRoutes.leaderboard),
-                    child: Text(
-                      'Leaderboard →',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.muted,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Leaderboard',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.arrow_forward, size: 12, color: AppColors.muted),
+                      ],
                     ),
                   ),
                 ],
@@ -188,12 +195,12 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Obx(() => _buildSettingsRow(
                     title: 'My region',
-                    value: '${controller.userRegion.value} ↗',
+                    value: controller.userRegion.value,
                     onTap: () => Get.toNamed(AppRoutes.region),
                   )),
               _buildSettingsRow(
                 title: 'Personal best & achievements',
-                value: 'View →',
+                value: 'View',
                 onTap: () => Get.toNamed(AppRoutes.achievements),
               ),
               const SizedBox(height: 36),
@@ -225,7 +232,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               _buildSettingsRow(
                 title: 'Notification settings',
-                value: 'Manage →',
+                value: 'Manage',
                 onTap: () => Get.toNamed(AppRoutes.notifications),
               ),
               _buildSettingsRow(
@@ -287,7 +294,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          const Text('↗', style: TextStyle(fontSize: 13)),
+                          const Icon(Icons.arrow_outward, size: 14),
                         ],
                       ),
                     ),

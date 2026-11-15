@@ -95,8 +95,8 @@ class _RegionScreenState extends State<RegionScreen> {
       _sessionController.setUserRegion(result.formattedRegion);
 
       Get.snackbar(
-        'Lokasi Terdeteksi! 📍',
-        'Koordinat: ${result.displayCoordinates}\nWilayah: ${result.formattedRegion}',
+        'Location Detected',
+        'Coordinates: ${result.displayCoordinates}\nRegion: ${result.formattedRegion}',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.paper,
         colorText: AppColors.ink,
@@ -108,7 +108,7 @@ class _RegionScreenState extends State<RegionScreen> {
       );
     } catch (e) {
       Get.snackbar(
-        'Gagal Deteksi Lokasi',
+        'Location Detection Failed',
         e.toString().replaceAll('Exception: ', ''),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.paper,
@@ -283,7 +283,7 @@ class _RegionScreenState extends State<RegionScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Deteksi koordinat GPS perangkat otomatis untuk menempatkan akun pada leaderboard regional setempat.',
+                      'Automatically detect device GPS coordinates to place your profile into the local regional leaderboard.',
                       style: GoogleFonts.dmSans(
                         fontSize: 12,
                         color: AppColors.muted,
@@ -304,7 +304,7 @@ class _RegionScreenState extends State<RegionScreen> {
                                 const Icon(Icons.gps_fixed, size: 14, color: AppColors.ink),
                                 const SizedBox(width: 6),
                                 Text(
-                                  'Koordinat: ${_detectedLocation!.displayCoordinates}',
+                                  'Coordinates: ${_detectedLocation!.displayCoordinates}',
                                   style: GoogleFonts.dmSans(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -315,7 +315,7 @@ class _RegionScreenState extends State<RegionScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Wilayah Terdeteksi: ${_detectedLocation!.formattedRegion}',
+                              'Detected Area: ${_detectedLocation!.formattedRegion}',
                               style: GoogleFonts.dmSans(
                                 fontSize: 11,
                                 color: AppColors.muted,
@@ -342,8 +342,8 @@ class _RegionScreenState extends State<RegionScreen> {
                             : const Icon(Icons.my_location, size: 16, color: AppColors.ink),
                         label: Text(
                           _isDetectingGps
-                              ? 'Mencari Koordinat GPS...'
-                              : 'Deteksi Lokasi GPS Saya (LBS)',
+                              ? 'Acquiring GPS Fix...'
+                              : 'Detect GPS Location',
                           style: GoogleFonts.dmSans(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -371,7 +371,7 @@ class _RegionScreenState extends State<RegionScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      'ATAU PILIH MANUAL',
+                      'OR SELECT MANUALLY',
                       style: GoogleFonts.dmSans(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -524,7 +524,7 @@ class _RegionScreenState extends State<RegionScreen> {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Text('↗', style: TextStyle(fontSize: 14)),
+                      const Icon(Icons.arrow_forward, size: 14, color: Colors.white),
                     ],
                   ),
                 ),

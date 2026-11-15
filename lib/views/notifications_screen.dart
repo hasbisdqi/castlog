@@ -92,9 +92,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     String dateLabel;
     if (date == today) {
-      dateLabel = 'Hari ini';
+      dateLabel = 'Today';
     } else if (date == tomorrow) {
-      dateLabel = 'Besok';
+      dateLabel = 'Tomorrow';
     } else {
       dateLabel = '${dt.day}/${dt.month}/${dt.year}';
     }
@@ -217,7 +217,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Pengingat sesi, alert tangkapan, dan notifikasi terjadwal Fishing Planet.',
+                'Session alerts, catch notifications, and scheduled reminders for Fishing Planet.',
                 style: GoogleFonts.dmSans(
                   fontSize: 13,
                   color: AppColors.muted,
@@ -227,12 +227,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 32),
 
               // ==========================================
-              // BAGIAN 1: NOTIFIKASI LANGSUNG (IMMEDIATE)
+              // SECTION 1: IMMEDIATE NOTIFICATIONS
               // ==========================================
-              _buildSectionTitle('Notifikasi Langsung (Immediate)'),
+              _buildSectionTitle('Immediate Notifications'),
               const SizedBox(height: 6),
               Text(
-                'Uji coba memicu notifikasi instan langsung muncul di status bar perangkat.',
+                'Trigger an instant alert directly to the device notification tray.',
                 style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.muted),
               ),
               const SizedBox(height: 12),
@@ -240,7 +240,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.notifications_active, size: 18),
-                  label: const Text('Kirim Notifikasi Sekarang'),
+                  label: const Text('Send Instant Notification'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.dark,
                     foregroundColor: Colors.white,
@@ -252,12 +252,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   ),
                   onPressed: () async {
                     await NotificationService().showInstantNotification(
-                      title: 'Halo Angler! 🎣',
-                      body: 'Ini adalah contoh immediate notification dari CastLog.',
+                      title: 'Hello Angler!',
+                      body: 'This is an immediate test notification from CastLog.',
                     );
                     Get.snackbar(
-                      'Notifikasi Terkirim',
-                      'Immediate notification berhasil dikirim ke status bar.',
+                      'Notification Sent',
+                      'Instant alert delivered to notification tray.',
                       snackPosition: SnackPosition.BOTTOM,
                       backgroundColor: AppColors.paper,
                       colorText: AppColors.ink,
@@ -272,19 +272,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               const SizedBox(height: 36),
 
               // ==========================================
-              // BAGIAN 2: NOTIFIKASI TERJADWAL (SCHEDULED)
+              // SECTION 2: SCHEDULED NOTIFICATIONS
               // ==========================================
-              _buildSectionTitle('Notifikasi Terjadwal (Scheduled)'),
+              _buildSectionTitle('Scheduled Session Reminders'),
               const SizedBox(height: 6),
               Text(
-                'Jadwalkan alarm pengingat jam puncak (Peak Bite Hour) pada danau pilihanmu. Notifikasi tetap aktif meski aplikasi ditutup.',
+                'Schedule peak bite hour reminders for your chosen waterway. Triggers even when the app is closed.',
                 style: GoogleFonts.dmSans(fontSize: 12, color: AppColors.muted, height: 1.4),
               ),
               const SizedBox(height: 14),
 
               // Waterway Picker
               Text(
-                'PILIH DANAU / WATERWAY',
+                'SELECT WATERWAY',
                 style: GoogleFonts.dmSans(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -328,7 +328,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
               // DateTime Picker Box
               Text(
-                'WAKTU REMINDER',
+                'REMINDER DATE & TIME',
                 style: GoogleFonts.dmSans(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
@@ -352,7 +352,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       Expanded(
                         child: Text(
                           _scheduledTime == null
-                              ? 'Pilih tanggal & waktu reminder...'
+                              ? 'Select date and time...'
                               : _formatDateTime(_scheduledTime!),
                           style: GoogleFonts.dmSans(
                             fontSize: 13,
@@ -377,7 +377,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.alarm, size: 18),
-                  label: const Text('Set Reminder Mancing ⏰'),
+                  label: const Text('Set Session Reminder'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _scheduledTime == null ? AppColors.soft : AppColors.ink,
                     foregroundColor: _scheduledTime == null ? AppColors.muted : Colors.white,
@@ -393,15 +393,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           final scheduledTime = _scheduledTime!;
                           await NotificationService().scheduleNotification(
                             id: 1,
-                            title: 'Reminder Sesi: $_selectedWaterway 🎣',
+                            title: 'Session Reminder: $_selectedWaterway',
                             body:
-                                'Jam makan puncak (Peak Hours) di $_selectedWaterway sudah mulai! Waktunya buka Fishing Planet.',
+                                'Peak bite hours at $_selectedWaterway have begun. Open Fishing Planet to start casting!',
                             scheduledTime: scheduledTime,
                           );
 
                           Get.snackbar(
-                            'Reminder Di-set! ⏰',
-                            'Alarm disetel untuk $_selectedWaterway pada ${_formatDateTime(scheduledTime)}',
+                            'Reminder Scheduled',
+                            'Alert set for $_selectedWaterway at ${_formatDateTime(scheduledTime)}',
                             snackPosition: SnackPosition.BOTTOM,
                             backgroundColor: AppColors.paper,
                             colorText: AppColors.ink,
@@ -487,13 +487,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      const Text(
-                        '↗',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                      const Icon(
+                        Icons.arrow_forward,
+                        size: 14,
+                        color: Colors.white,
                       ),
                     ],
                   ),

@@ -257,13 +257,20 @@ class AnglerProfileScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => Get.toNamed(AppRoutes.achievements),
-              child: Text(
-                'All achievements →',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.muted,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'All achievements',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.arrow_forward, size: 12, color: AppColors.muted),
+                ],
               ),
             ),
           ],
@@ -357,13 +364,20 @@ class AnglerProfileScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => Get.toNamed(AppRoutes.leaderboard),
-              child: Text(
-                'Leaderboard →',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.muted,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Leaderboard',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.arrow_forward, size: 12, color: AppColors.muted),
+                ],
               ),
             ),
           ],

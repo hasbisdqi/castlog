@@ -402,13 +402,20 @@ class CatchDetailScreen extends StatelessWidget {
                 border: Border.all(color: AppColors.line),
               ),
               child: Center(
-                child: Text(
-                  'Share catch ↗',
-                  style: GoogleFonts.dmSans(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.ink,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.share_outlined, size: 14, color: AppColors.ink),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Share catch',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

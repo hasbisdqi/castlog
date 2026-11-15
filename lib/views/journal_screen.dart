@@ -8,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum JournalSort {
-  newest('Newest first ↓'),
-  heaviest('Heaviest first ↓'),
-  oldest('Oldest first ↑');
+  newest('Newest first'),
+  heaviest('Heaviest first'),
+  oldest('Oldest first');
 
   final String label;
   const JournalSort(this.label);

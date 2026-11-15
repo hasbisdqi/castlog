@@ -159,13 +159,20 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () => Get.toNamed(AppRoutes.activeSession),
-                      child: Text(
-                        'Open →',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.ink,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Open',
+                            style: GoogleFonts.dmSans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.arrow_forward, size: 12, color: AppColors.ink),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 14),
@@ -478,13 +485,20 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               color: AppColors.ink,
-              child: Text(
-                'End & View Summary ↗',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'End & View Summary',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  const Icon(Icons.arrow_forward, size: 12, color: Colors.white),
+                ],
               ),
             ),
           ),
@@ -527,7 +541,7 @@ class HomeScreen extends StatelessWidget {
         Expanded(
           child: _buildSecondaryButton(
             text: 'All sessions',
-            icon: '↗',
+            icon: Icons.arrow_forward,
             onTap: () => Get.toNamed(AppRoutes.sessions),
           ),
         ),
@@ -536,7 +550,8 @@ class HomeScreen extends StatelessWidget {
           child: Obx(() {
             final hasActive = controller.activeSession.value != null;
             return _buildSecondaryButton(
-              text: hasActive ? '＋ Log catch' : '＋ New session',
+              text: hasActive ? 'Log catch' : 'New session',
+              icon: Icons.add,
               onTap: () {
                 if (hasActive) {
                   LogCatchBottomSheet.show(context);
@@ -553,7 +568,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildSecondaryButton({
     required String text,
-    String? icon,
+    IconData? icon,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -576,13 +591,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             if (icon != null)
-              Text(
+              Icon(
                 icon,
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.ink,
-                ),
+                size: 14,
+                color: AppColors.ink,
               ),
           ],
         ),
@@ -680,13 +692,20 @@ class HomeScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => Get.toNamed(AppRoutes.leaderboard),
-              child: Text(
-                'View rankings →',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.muted,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'View rankings',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.arrow_forward, size: 12, color: AppColors.muted),
+                ],
               ),
             ),
           ],
@@ -737,14 +756,21 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  '#12 ↗',
-                  style: GoogleFonts.manrope(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -1.0,
-                    color: AppColors.ink,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '#12',
+                      style: GoogleFonts.manrope(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -1.0,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.arrow_forward, size: 16, color: AppColors.ink),
+                  ],
                 ),
               ],
             ),
@@ -774,13 +800,20 @@ class HomeScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {},
-              child: Text(
-                'Full journal →',
-                style: GoogleFonts.dmSans(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.muted,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Full journal',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.muted,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.arrow_forward, size: 12, color: AppColors.muted),
+                ],
               ),
             ),
           ],

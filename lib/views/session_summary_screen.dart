@@ -474,13 +474,10 @@ class SessionSummaryScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                const Text(
-                  '↗',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
+                const Icon(
+                  Icons.arrow_forward,
+                  size: 14,
+                  color: Colors.white,
                 ),
               ],
             ),

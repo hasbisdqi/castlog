@@ -251,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                const Text('↗', style: TextStyle(fontSize: 13)),
+                                const Icon(Icons.arrow_outward, size: 14),
                               ],
                             ),
                     ),
@@ -273,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     child: Text(
-                      'Continue as guest →',
+                      'Continue as guest',
                       style: GoogleFonts.dmSans(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -297,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const TextSpan(text: "Don't have an account? "),
                           TextSpan(
-                            text: 'Create one →',
+                            text: 'Create one',
                             style: GoogleFonts.dmSans(
                               fontWeight: FontWeight.w700,
                               color: AppColors.ink,

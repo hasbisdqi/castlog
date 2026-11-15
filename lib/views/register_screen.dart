@@ -328,7 +328,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                const Text('↗', style: TextStyle(fontSize: 13)),
+                                const Icon(Icons.arrow_outward, size: 14),
                               ],
                             ),
                     ),
@@ -349,7 +349,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           const TextSpan(text: 'Already have an account? '),
                           TextSpan(
-                            text: 'Sign in →',
+                            text: 'Sign in',
                             style: GoogleFonts.dmSans(
                               fontWeight: FontWeight.w700,
                               color: AppColors.ink,
