@@ -1,48 +1,48 @@
+import 'package:castlog/controllers/navigation_controller.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:castlog/views/home_screen.dart';
 import 'package:castlog/views/journal_screen.dart';
 import 'package:castlog/views/tackle_box_screen.dart';
 import 'package:castlog/widgets/custom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Layout extends StatefulWidget {
+class Layout extends StatelessWidget {
   const Layout({super.key});
 
-  @override
-  State<Layout> createState() => _LayoutState();
-}
-
-class _LayoutState extends State<Layout> {
-  int _selectedIndex = 0;
-
-  final List<NavItemData> _navItems = [
+  static final List<NavItemData> _navItems = [
     NavItemData(icon: Icons.home_rounded, label: "Home"),
     NavItemData(icon: Icons.notes, label: "Journal"),
     NavItemData(icon: Icons.bento, label: "Tackle Box"),
   ];
 
-  late final List<Widget> _pages = [
-    const HomeScreen(),
-    const JournalScreen(),
-    const TackleBoxScreen()
+  static const List<Widget> _pages = [
+    HomeScreen(),
+    JournalScreen(),
+    TackleBoxScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bg,
-      extendBody: true,
-      body: IndexedStack(index: _selectedIndex, children: _pages),
+    final navController = Get.find<NavigationController>();
 
-      bottomNavigationBar: CustomNavBar(
-        navItems: _navItems,
-        selectedIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-    );
+    return Obx(() {
+      final selectedIndex = navController.selectedIndex.value;
+      return Scaffold(
+        backgroundColor: AppColors.bg,
+        extendBody: true,
+        body: IndexedStack(
+          index: selectedIndex,
+          children: _pages,
+        ),
+        bottomNavigationBar: CustomNavBar(
+          navItems: _navItems,
+          selectedIndex: selectedIndex,
+          onItemTapped: (index) {
+            navController.changeTab(index);
+          },
+        ),
+      );
+    });
   }
 }

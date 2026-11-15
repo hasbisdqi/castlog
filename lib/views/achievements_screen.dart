@@ -157,7 +157,7 @@ class AchievementsScreen extends StatelessWidget {
     for (final c in controller.catches) {
       speciesCounts[c.species] = (speciesCounts[c.species] ?? 0) + 1;
     }
-    String mostCaught = 'Common Carp';
+    String mostCaught = speciesCounts.isEmpty ? '-' : 'Common Carp';
     int maxCount = 0;
     speciesCounts.forEach((k, v) {
       if (v > maxCount) {
@@ -165,6 +165,17 @@ class AchievementsScreen extends StatelessWidget {
         mostCaught = k;
       }
     });
+
+    int maxSeconds = 0;
+    int maxCatches = 0;
+    for (final s in controller.pastSessions) {
+      if (s.duration.inSeconds > maxSeconds) maxSeconds = s.duration.inSeconds;
+      if (s.catches.length > maxCatches) maxCatches = s.catches.length;
+    }
+    final longestSessionStr = maxSeconds > 0
+        ? '${maxSeconds ~/ 3600 > 0 ? '${maxSeconds ~/ 3600}h ' : ''}${(maxSeconds % 3600) ~/ 60}m'
+        : '0m';
+    final mostCatchesStr = maxCatches > 0 ? '$maxCatches fish' : '0 fish';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +219,7 @@ class AchievementsScreen extends StatelessWidget {
                   Expanded(
                     child: _buildMetaItem(
                       'HEAVIEST CATCH',
-                      heaviest != null ? heaviest.weightFormatted : '8.2 kg',
+                      heaviest != null ? heaviest.weightFormatted : '0.0 kg',
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -221,11 +232,11 @@ class AchievementsScreen extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _buildMetaItem('LONGEST SESSION', '3h 20m'),
+                    child: _buildMetaItem('LONGEST SESSION', longestSessionStr),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: _buildMetaItem('MOST CATCHES / SESSION', '18 fish'),
+                    child: _buildMetaItem('MOST CATCHES / SESSION', mostCatchesStr),
                   ),
                 ],
               ),

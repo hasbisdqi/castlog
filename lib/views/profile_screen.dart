@@ -348,7 +348,11 @@ class ProfileScreen extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _buildStatItem('#12', 'Local rank', hasBorder: false),
+            child: _buildStatItem(
+              controller.catches.isEmpty ? '--' : '#1',
+              'Local rank',
+              hasBorder: false,
+            ),
           ),
           Expanded(
             child: _buildStatItem(
@@ -358,7 +362,11 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _buildStatItem('06', 'Achievements', hasBorder: true),
+            child: _buildStatItem(
+              '0${controller.unlockedAchievementsCount}',
+              'Achievements',
+              hasBorder: true,
+            ),
           ),
         ],
       ),

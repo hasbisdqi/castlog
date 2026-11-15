@@ -195,7 +195,11 @@ class AnglerProfileScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: _buildStatItem('#12', 'Local rank', hasBorder: true),
+            child: _buildStatItem(
+              controller.catches.isEmpty ? '--' : '#1',
+              'Local rank',
+              hasBorder: true,
+            ),
           ),
         ],
       ),

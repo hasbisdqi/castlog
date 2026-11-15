@@ -1,3 +1,4 @@
+import 'package:castlog/controllers/navigation_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
@@ -759,15 +760,15 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      '#12',
-                      style: GoogleFonts.manrope(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: -1.0,
-                        color: AppColors.ink,
-                      ),
-                    ),
+                    Obx(() => Text(
+                          controller.catches.isEmpty ? '--' : '#1',
+                          style: GoogleFonts.manrope(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: -1.0,
+                            color: AppColors.ink,
+                          ),
+                        )),
                     const SizedBox(width: 4),
                     const Icon(Icons.arrow_forward, size: 16, color: AppColors.ink),
                   ],
@@ -799,7 +800,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () => Get.find<NavigationController>().changeTab(1),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

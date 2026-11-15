@@ -392,4 +392,15 @@ class SessionController extends GetxController {
 
     return all.first.fishSpecies;
   }
+
+  int get unlockedAchievementsCount {
+    int count = 0;
+    if (catches.isNotEmpty) count++;
+    if (pastSessions.length >= 2) count++;
+    if (catches.any((c) => c.weightKg >= 8.0)) count++;
+    if (catches.map((c) => c.species).toSet().length >= 3) count++;
+    count++; // Journal keeper
+    count++; // Local competitor
+    return count;
+  }
 }
