@@ -1,7 +1,9 @@
+import 'package:castlog/controllers/auth_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/models/setup_model.dart';
 import 'package:castlog/models/waterway_model.dart';
 import 'package:castlog/services/notification_service.dart';
+import 'package:castlog/services/supabase_leaderboard_service.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -404,6 +406,38 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
       waterway: waterway.split(" - ").first,
       isPersonalBest: isPb,
     );
+
+    // Sync catch to Supabase Leaderboard
+    try {
+      final authController =
+          Get.isRegistered<AuthController>() ? Get.find<AuthController>() : null;
+      final user = authController?.currentUser.value;
+      final name = (user != null && user.displayName.isNotEmpty)
+          ? user.displayName
+          : 'Angler CastLog';
+
+      String cat = 'Other';
+      final sp = _selectedSpecies!.name.toLowerCase();
+      if (sp.contains('carp')) {
+        cat = 'Carp';
+      } else if (sp.contains('bass')) {
+        cat = 'Bass';
+      }
+
+      SupabaseLeaderboardService().submitCatch(
+        name: name,
+        species: _selectedSpecies!.name,
+        category: cat,
+        location: waterway.split(" - ").first,
+        weightKg: weight,
+        region: sessionController.userRegion.value,
+        avatarUrl: user?.avatarUrl,
+        photoUrl: chosenImage,
+        rod: _selectedRod?.rodName,
+        bait: _selectedRod?.baitOrLure,
+        userId: user?.id,
+      );
+    } catch (_) {}
 
     Get.back();
     Get.snackbar(

@@ -1,4 +1,5 @@
 import 'package:castlog/controllers/session_controller.dart';
+import 'package:castlog/services/location_service.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,11 +57,70 @@ class _RegionScreenState extends State<RegionScreen> {
   String? _selectedCity = 'Kota Yogyakarta';
   String _regionScope = 'City / Regency';
 
+  // LBS State
+  bool _isDetectingGps = false;
+  LocationResult? _detectedLocation;
+
   @override
   void initState() {
     super.initState();
-    // Default initial city based on DI Yogyakarta
+    // Initialize based on existing sessionController region
+    final current = _sessionController.userRegion.value;
+    for (final p in _provinceCities.keys) {
+      if (current.contains(p)) {
+        _selectedProvince = p;
+        break;
+      }
+    }
     _selectedCity = _provinceCities[_selectedProvince]?.first;
+  }
+
+  Future<void> _detectGpsLocation() async {
+    setState(() => _isDetectingGps = true);
+    try {
+      final result = await LocationService().detectUserRegion();
+      setState(() {
+        _detectedLocation = result;
+        _selectedProvince = result.province;
+        if (_provinceCities.containsKey(result.province)) {
+          final cities = _provinceCities[result.province]!;
+          if (cities.contains(result.city)) {
+            _selectedCity = result.city;
+          } else {
+            _selectedCity = cities.first;
+          }
+        }
+      });
+
+      _sessionController.setUserRegion(result.formattedRegion);
+
+      Get.snackbar(
+        'Lokasi Terdeteksi! 📍',
+        'Koordinat: ${result.displayCoordinates}\nWilayah: ${result.formattedRegion}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.paper,
+        colorText: AppColors.ink,
+        borderRadius: 0,
+        borderColor: AppColors.ink,
+        borderWidth: 1,
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 4),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Gagal Deteksi Lokasi',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColors.paper,
+        colorText: Colors.red.shade800,
+        borderRadius: 0,
+        borderColor: Colors.red.shade800,
+        borderWidth: 1,
+        margin: const EdgeInsets.all(16),
+      );
+    } finally {
+      setState(() => _isDetectingGps = false);
+    }
   }
 
   void _onProvinceChanged(String? newProvince) {
@@ -182,7 +242,148 @@ class _RegionScreenState extends State<RegionScreen> {
                   color: AppColors.muted,
                 ),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 24),
+
+              // LBS Location Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: AppColors.paper,
+                  border: Border.all(color: AppColors.line),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LOCATION-BASED SERVICE (LBS)',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.2,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                        if (_detectedLocation != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            color: AppColors.ink,
+                            child: Text(
+                              'GPS ACTIVE',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Deteksi koordinat GPS perangkat otomatis untuk menempatkan akun pada leaderboard regional setempat.',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 12,
+                        color: AppColors.muted,
+                        height: 1.4,
+                      ),
+                    ),
+                    if (_detectedLocation != null) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        color: AppColors.bg,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.gps_fixed, size: 14, color: AppColors.ink),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'Koordinat: ${_detectedLocation!.displayCoordinates}',
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.ink,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Wilayah Terdeteksi: ${_detectedLocation!.formattedRegion}',
+                              style: GoogleFonts.dmSans(
+                                fontSize: 11,
+                                color: AppColors.muted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 14),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: _isDetectingGps ? null : _detectGpsLocation,
+                        icon: _isDetectingGps
+                            ? const SizedBox(
+                                width: 14,
+                                height: 14,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.ink,
+                                ),
+                              )
+                            : const Icon(Icons.my_location, size: 16, color: AppColors.ink),
+                        label: Text(
+                          _isDetectingGps
+                              ? 'Mencari Koordinat GPS...'
+                              : 'Deteksi Lokasi GPS Saya (LBS)',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.ink,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.ink),
+                          padding: const EdgeInsets.symmetric(vertical: 13),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Manual Section Divider
+              Row(
+                children: [
+                  Expanded(child: Container(height: 1, color: AppColors.line)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      'ATAU PILIH MANUAL',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.2,
+                        color: AppColors.muted,
+                      ),
+                    ),
+                  ),
+                  Expanded(child: Container(height: 1, color: AppColors.line)),
+                ],
+              ),
+              const SizedBox(height: 20),
 
               // Form: Province
               _buildFieldLabel('Province'),
@@ -254,8 +455,8 @@ class _RegionScreenState extends State<RegionScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Form: Display region as
-              _buildFieldLabel('Display region as'),
+              // Scope
+              _buildFieldLabel('Leaderboard Scope'),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -289,7 +490,7 @@ class _RegionScreenState extends State<RegionScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'This setting only changes which local leaderboard you see in this prototype.',
+                'This setting adjusts your regional leaderboard view and ranking filter.',
                 style: GoogleFonts.dmSans(
                   fontSize: 11,
                   color: AppColors.muted,
