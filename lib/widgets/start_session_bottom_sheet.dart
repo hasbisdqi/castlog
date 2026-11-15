@@ -45,7 +45,19 @@ class _StartSessionBottomSheetState extends State<StartSessionBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final waterways = sessionController.waterways;
+    final rawWaterways = sessionController.waterways;
+    final seen = <String>{};
+    final waterways = rawWaterways.where((w) => w.name.isNotEmpty && seen.add(w.name)).toList();
+
+    if (waterways.isNotEmpty) {
+      if (_selectedWaterway == null || !waterways.contains(_selectedWaterway)) {
+        _selectedWaterway = waterways.first;
+      } else {
+        _selectedWaterway = waterways.firstWhere((w) => w == _selectedWaterway);
+      }
+    } else {
+      _selectedWaterway = null;
+    }
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,

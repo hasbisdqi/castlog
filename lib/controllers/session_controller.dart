@@ -180,10 +180,12 @@ class SessionController extends GetxController {
 
   // Get species list available for current session waterway
   List<MapFishSpecies> getCurrentWaterwaySpecies() {
+    final all = _waterwayService.getAllWaterways();
+    if (all.isEmpty) return [];
+
     final session = activeSession.value;
     if (session == null) {
-      final defaultWaterway = _waterwayService.getAllWaterways().first;
-      return defaultWaterway.fishSpecies;
+      return all.first.fishSpecies;
     }
 
     final match = _waterwayService.getWaterwayByName(session.waterwayName);
@@ -191,6 +193,6 @@ class SessionController extends GetxController {
       return match.fishSpecies;
     }
 
-    return _waterwayService.getAllWaterways().first.fishSpecies;
+    return all.first.fishSpecies;
   }
 }

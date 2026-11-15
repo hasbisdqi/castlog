@@ -26,6 +26,16 @@ class MapFishSpecies {
         'image': image,
         'url': url,
       };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MapFishSpecies &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
 
 class WaterwayModel {
@@ -47,13 +57,34 @@ class WaterwayModel {
 
   factory WaterwayModel.fromJson(Map<String, dynamic> json) {
     final list = json['fishSpecies'] as List<dynamic>? ?? [];
+    final seen = <String>{};
+    final species = <MapFishSpecies>[];
+    for (final item in list) {
+      if (item is Map<String, dynamic>) {
+        final sp = MapFishSpecies.fromJson(item);
+        if (sp.name.isNotEmpty && seen.add(sp.name)) {
+          species.add(sp);
+        }
+      }
+    }
+
     return WaterwayModel(
       name: json['name'] as String? ?? '',
       region: json['region'] as String? ?? '',
       locationCountry: json['locationCountry'] as String? ?? '',
       image: json['image'] as String? ?? '',
       description: json['description'] as String? ?? '',
-      fishSpecies: list.map((e) => MapFishSpecies.fromJson(e as Map<String, dynamic>)).toList(),
+      fishSpecies: species,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WaterwayModel &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }

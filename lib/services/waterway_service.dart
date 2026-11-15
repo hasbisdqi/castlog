@@ -3,7 +3,17 @@ import 'package:castlog/models/waterway_model.dart';
 import 'package:hive/hive.dart';
 
 class WaterwayService {
+  static List<WaterwayModel>? _cachedWaterways;
+
+  static void clearCache() {
+    _cachedWaterways = null;
+  }
+
   List<WaterwayModel> getAllWaterways() {
+    if (_cachedWaterways != null && _cachedWaterways!.isNotEmpty) {
+      return _cachedWaterways!;
+    }
+
     if (!Hive.isBoxOpen('maps_raw')) return _getFallbackWaterways();
     final box = Hive.box<String>('maps_raw');
     final raw = box.get('maps_json');
@@ -11,7 +21,18 @@ class WaterwayService {
 
     try {
       final List<dynamic> list = jsonDecode(raw);
-      return list.map((item) => WaterwayModel.fromJson(item as Map<String, dynamic>)).toList();
+      final seen = <String>{};
+      final waterways = <WaterwayModel>[];
+      for (final item in list) {
+        if (item is Map<String, dynamic>) {
+          final w = WaterwayModel.fromJson(item);
+          if (w.name.isNotEmpty && seen.add(w.name)) {
+            waterways.add(w);
+          }
+        }
+      }
+      _cachedWaterways = waterways.isNotEmpty ? waterways : _getFallbackWaterways();
+      return _cachedWaterways!;
     } catch (_) {
       return _getFallbackWaterways();
     }
@@ -19,6 +40,7 @@ class WaterwayService {
 
   WaterwayModel? getWaterwayByName(String name) {
     final all = getAllWaterways();
+    if (all.isEmpty) return null;
     return all.firstWhere(
       (w) => w.name.toLowerCase().contains(name.toLowerCase()) || name.toLowerCase().contains(w.name.toLowerCase()),
       orElse: () => all.first,

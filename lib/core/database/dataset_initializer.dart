@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:castlog/models/gear_model.dart';
+import 'package:castlog/services/waterway_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,6 +48,7 @@ class DatasetInitializer {
     final box = Hive.box<String>('maps_raw');
     await box.clear();
     await box.put('maps_json', response.body);
+    WaterwayService.clearCache();
   }
 
   static Future<void> _downloadFish() async {

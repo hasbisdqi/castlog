@@ -57,8 +57,20 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final activeSession = sessionController.activeSession.value;
-    final availableSpecies = sessionController.getCurrentWaterwaySpecies();
+    final rawSpecies = sessionController.getCurrentWaterwaySpecies();
+    final seen = <String>{};
+    final availableSpecies = rawSpecies.where((s) => s.name.isNotEmpty && seen.add(s.name)).toList();
     final availableRods = activeSession?.loadout.rods ?? [];
+
+    if (availableSpecies.isNotEmpty) {
+      if (_selectedSpecies == null || !availableSpecies.contains(_selectedSpecies)) {
+        _selectedSpecies = availableSpecies.first;
+      } else {
+        _selectedSpecies = availableSpecies.firstWhere((s) => s == _selectedSpecies);
+      }
+    } else {
+      _selectedSpecies = null;
+    }
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.90,
