@@ -100,7 +100,7 @@ class RankDetailScreen extends StatelessWidget {
                   child: Image.network(
                     photoUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (ctx, _, __) => Container(
+                    errorBuilder: (context, error, stackTrace) => Container(
                       color: AppColors.soft,
                       child: const Center(
                         child: Icon(Icons.broken_image, color: AppColors.muted),

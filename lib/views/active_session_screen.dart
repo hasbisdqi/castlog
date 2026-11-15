@@ -421,9 +421,9 @@ class ActiveSessionScreen extends StatelessWidget {
           Column(
             children: rods.map((rod) {
               final specs = [
-                if (rod.reelName != null && rod.reelName!.isNotEmpty) rod.reelName!,
-                if (rod.lineName != null && rod.lineName!.isNotEmpty) rod.lineName!,
-                if (rod.baitOrLure != null && rod.baitOrLure!.isNotEmpty) rod.baitOrLure!,
+                if (rod.reel != null && rod.reel!.isNotEmpty) rod.reel!,
+                if (rod.line != null && rod.line!.isNotEmpty) rod.line!,
+                if (rod.baitOrLure.isNotEmpty) rod.baitOrLure,
               ].join(' · ');
 
               return Container(

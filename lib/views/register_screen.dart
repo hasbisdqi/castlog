@@ -1,5 +1,4 @@
 import 'package:castlog/controllers/auth_controller.dart';
-import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -476,7 +476,7 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (context, error, stackTrace) => Container(
                       height: 180,
                       color: AppColors.soft,
                       child: const Center(
@@ -715,7 +715,7 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: presets.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  separatorBuilder: (context, index) => const SizedBox(width: 10),
                   itemBuilder: (ctx, i) {
                     final p = presets[i];
                     return GestureDetector(
@@ -739,7 +739,8 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
                                 p['url']!,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
-                                errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image)),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Center(child: Icon(Icons.broken_image)),
                               ),
                             ),
                             Padding(
