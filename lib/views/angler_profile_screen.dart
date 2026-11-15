@@ -124,12 +124,12 @@ class AnglerProfileScreen extends StatelessWidget {
               const SizedBox(height: 36),
 
               // Section: Community
-              _buildCommunitySection(),
+              _buildCommunitySection(controller),
               const SizedBox(height: 28),
 
               // Profile Settings Button
               InkWell(
-                onTap: () => Get.back(),
+                onTap: () => Get.toNamed(AppRoutes.profile),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -328,21 +328,37 @@ class AnglerProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCommunitySection() {
+  Widget _buildCommunitySection(SessionController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Community',
-          style: GoogleFonts.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.5,
-            color: AppColors.ink,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Community',
+              style: GoogleFonts.manrope(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
+                color: AppColors.ink,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Get.toNamed(AppRoutes.leaderboard),
+              child: Text(
+                'Leaderboard →',
+                style: GoogleFonts.dmSans(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.muted,
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 10),
-        _buildInfoRow('Region', 'North America'),
+        Obx(() => _buildInfoRow('Region', controller.userRegion.value)),
         _buildInfoRow('Current rank', '#12 overall'),
       ],
     );

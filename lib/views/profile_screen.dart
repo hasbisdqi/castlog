@@ -131,25 +131,29 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 36),
 
               // Community Section
-              _buildSectionHeader('Community'),
-              const SizedBox(height: 10),
-              _buildSettingsRow(
-                title: 'My region',
-                value: 'North America ↗',
-                onTap: () {
-                  Get.snackbar(
-                    'Region',
-                    'Current region is North America',
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: AppColors.paper,
-                    colorText: AppColors.ink,
-                    borderRadius: 0,
-                    borderColor: AppColors.ink,
-                    borderWidth: 1,
-                    margin: const EdgeInsets.all(16),
-                  );
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSectionHeader('Community'),
+                  GestureDetector(
+                    onTap: () => Get.toNamed(AppRoutes.leaderboard),
+                    child: Text(
+                      'Leaderboard →',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.muted,
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 10),
+              Obx(() => _buildSettingsRow(
+                    title: 'My region',
+                    value: '${controller.userRegion.value} ↗',
+                    onTap: () => Get.toNamed(AppRoutes.region),
+                  )),
               _buildSettingsRow(
                 title: 'Personal best & achievements',
                 value: 'View →',

@@ -6,8 +6,11 @@ import 'package:castlog/views/achievements_screen.dart';
 import 'package:castlog/views/active_session_screen.dart';
 import 'package:castlog/views/angler_profile_screen.dart';
 import 'package:castlog/views/catch_detail_screen.dart';
+import 'package:castlog/views/leaderboard_screen.dart';
 import 'package:castlog/views/notifications_screen.dart';
 import 'package:castlog/views/profile_screen.dart';
+import 'package:castlog/views/rank_detail_screen.dart';
+import 'package:castlog/views/region_screen.dart';
 import 'package:castlog/views/session_summary_screen.dart';
 import 'package:castlog/views/sessions_screen.dart';
 import 'package:castlog/views/setup_form_screen.dart';
@@ -63,6 +66,18 @@ class AppPages {
     GetPage(
       name: AppRoutes.notifications,
       page: () => const NotificationsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.leaderboard,
+      page: () => const LeaderboardScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.rankDetail,
+      page: () => const RankDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.region,
+      page: () => const RegionScreen(),
     ),
   ];
 }

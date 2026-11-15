@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 36),
                     Obx(() => _buildStatsRow(sessionController)),
                     const SizedBox(height: 38),
-                    _buildLocalLeaderboard(context),
+                    _buildLocalLeaderboard(context, sessionController),
                     const SizedBox(height: 38),
                     Obx(() => _buildRecentCatches(context, sessionController)),
                   ],
@@ -661,7 +661,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLocalLeaderboard(BuildContext context) {
+  Widget _buildLocalLeaderboard(
+      BuildContext context, SessionController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -678,7 +679,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () => Get.toNamed(AppRoutes.leaderboard),
               child: Text(
                 'View rankings →',
                 style: GoogleFonts.dmSans(
@@ -692,7 +693,7 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         InkWell(
-          onTap: () {},
+          onTap: () => Get.toNamed(AppRoutes.leaderboard),
           child: Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
@@ -706,15 +707,15 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'YOUR REGION · NORTH AMERICA',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.8,
-                          color: AppColors.muted,
-                        ),
-                      ),
+                      Obx(() => Text(
+                            'YOUR REGION · ${controller.userRegion.value.toUpperCase()}',
+                            style: GoogleFonts.dmSans(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.8,
+                              color: AppColors.muted,
+                            ),
+                          )),
                       const SizedBox(height: 6),
                       Text(
                         'See how you rank locally.',

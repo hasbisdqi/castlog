@@ -9,4 +9,7 @@ abstract class AppRoutes {
   static const String anglerProfile = '/angler-profile';
   static const String achievements = '/achievements';
   static const String notifications = '/notifications';
+  static const String leaderboard = '/leaderboard';
+  static const String rankDetail = '/rank-detail';
+  static const String region = '/region';
 }

@@ -25,6 +25,13 @@ class SessionController extends GetxController {
   final RxString formattedTimer = '00:00'.obs;
   Timer? _timer;
 
+  // Observable user region for leaderboard and community
+  final RxString userRegion = 'Yogyakarta'.obs;
+
+  void setUserRegion(String region) {
+    userRegion.value = region;
+  }
+
   List<WaterwayModel> get waterways => _waterwayService.getAllWaterways();
 
   @override
