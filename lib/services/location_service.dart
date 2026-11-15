@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class LocationResult {
   final double latitude;
@@ -62,14 +63,33 @@ class LocationService {
     String city = 'Kota Yogyakarta';
 
     try {
-      final placemarks = await placemarkFromCoordinates(lat, lng);
-      if (placemarks.isNotEmpty) {
-        final place = placemarks.first;
-        final admin = place.administrativeArea ?? '';
-        final subAdmin = place.subAdministrativeArea ?? place.locality ?? '';
+      // Reverse geocode via OpenStreetMap Nominatim with 5-second timeout
+      final uri = Uri.parse(
+        'https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=json&accept-language=id',
+      );
+      final response = await http.get(
+        uri,
+        headers: {'User-Agent': 'CastLog-Fishing-Planet/1.0'},
+      ).timeout(const Duration(seconds: 5));
 
-        province = _normalizeProvince(admin, lat: lat, lng: lng);
-        city = subAdmin.isNotEmpty ? subAdmin : _defaultCityForProvince(province);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final address = data['address'] as Map<String, dynamic>?;
+        if (address != null) {
+          final state = (address['state'] ?? address['province'] ?? '').toString();
+          final subAdmin = (address['city'] ??
+                  address['county'] ??
+                  address['town'] ??
+                  address['municipality'] ??
+                  '')
+              .toString();
+
+          province = _normalizeProvince(state, lat: lat, lng: lng);
+          city = subAdmin.isNotEmpty ? subAdmin : _defaultCityForProvince(province);
+        } else {
+          province = _fallbackProvinceFromCoordinates(lat, lng);
+          city = _defaultCityForProvince(province);
+        }
       } else {
         province = _fallbackProvinceFromCoordinates(lat, lng);
         city = _defaultCityForProvince(province);
