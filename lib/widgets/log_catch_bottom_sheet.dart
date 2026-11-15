@@ -1,6 +1,7 @@
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/models/setup_model.dart';
 import 'package:castlog/models/waterway_model.dart';
+import 'package:castlog/services/notification_service.dart';
 import 'package:castlog/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -387,6 +388,21 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
       rodSlot: _selectedRod!,
       image: chosenImage,
       notes: _notesController.text.trim(),
+    );
+
+    // Trigger local immediate notification
+    final waterway = sessionController.activeSession.value?.waterwayName ?? 'Emerald Lake';
+    double maxWeight = 0;
+    for (final c in sessionController.catches) {
+      if (c.weightKg > maxWeight) maxWeight = c.weightKg;
+    }
+    final isPb = weight > maxWeight && maxWeight > 0;
+
+    NotificationService().showCatchNotification(
+      species: _selectedSpecies!.name,
+      weightKg: weight,
+      waterway: waterway.split(" - ").first,
+      isPersonalBest: isPb,
     );
 
     Get.back();
