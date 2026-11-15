@@ -28,80 +28,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   List<Map<String, dynamic>> _supabaseEntries = [];
 
-  // Fallback seed entries
-  final List<Map<String, dynamic>> _fallbackEntries = [
-    {
-      'rank': '01',
-      'name': 'Arga Pratama',
-      'species': 'Common Carp',
-      'category': 'Carp',
-      'location': 'Emerald Lake',
-      'weight': '18.42 kg',
-      'date': 'Nov 11, 2026',
-      'avatarUrl': 'https://i.pravatar.cc/100?img=11',
-      'photoUrl':
-          'https://images.unsplash.com/photo-1535392432937-a27c36ec07b5?w=1000&q=85',
-      'rod': 'Carp Hunter',
-      'bait': 'Sweet Corn',
-    },
-    {
-      'rank': '02',
-      'name': 'Rizky Mahendra',
-      'species': 'Grass Carp',
-      'category': 'Carp',
-      'location': 'Emerald Lake',
-      'weight': '16.80 kg',
-      'date': 'Nov 10, 2026',
-      'avatarUrl': 'https://i.pravatar.cc/100?img=12',
-      'photoUrl':
-          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&q=85',
-      'rod': 'River King 240',
-      'bait': 'Bread Pellet',
-    },
-    {
-      'rank': '03',
-      'name': 'Dimas Saputra',
-      'species': 'Common Carp',
-      'category': 'Carp',
-      'location': 'Lonely Oak',
-      'weight': '15.25 kg',
-      'date': 'Nov 09, 2026',
-      'avatarUrl': 'https://i.pravatar.cc/100?img=13',
-      'photoUrl':
-          'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?w=1000&q=85',
-      'rod': 'Carp Hunter',
-      'bait': 'Sweet Corn',
-    },
-    {
-      'rank': '04',
-      'name': 'Fajar Nugroho',
-      'species': 'Northern Pike',
-      'category': 'Other',
-      'location': 'White Moose',
-      'weight': '12.90 kg',
-      'date': 'Nov 08, 2026',
-      'avatarUrl': 'https://i.pravatar.cc/100?img=14',
-      'photoUrl':
-          'https://images.unsplash.com/photo-1535392432937-a27c36ec07b5?w=1000&q=85',
-      'rod': 'Predator Cast',
-      'bait': 'Live Minnow',
-    },
-    {
-      'rank': '05',
-      'name': 'Bagas Wicaksono',
-      'species': 'Common Carp',
-      'category': 'Carp',
-      'location': 'Emerald Lake',
-      'weight': '11.75 kg',
-      'date': 'Nov 07, 2026',
-      'avatarUrl': 'https://i.pravatar.cc/100?img=15',
-      'photoUrl':
-          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&q=85',
-      'rod': 'Carp Hunter',
-      'bait': 'Sweet Corn',
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -254,15 +180,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 
   List<Map<String, dynamic>> get _displayEntries {
-    if (_supabaseEntries.isNotEmpty) {
-      return _supabaseEntries;
-    }
-    if (_selectedTab == 'Carp') {
-      return _fallbackEntries.where((e) => e['category'] == 'Carp').toList();
-    } else if (_selectedTab == 'Bass') {
-      return _fallbackEntries.where((e) => e['category'] == 'Bass').toList();
-    }
-    return _fallbackEntries;
+    return _supabaseEntries;
   }
 
   @override
