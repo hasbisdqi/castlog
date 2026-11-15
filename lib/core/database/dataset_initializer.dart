@@ -19,6 +19,12 @@ class DatasetInitializer {
     final gearBox = await Hive.openBox<GearModel>('gears');
     final mapsBox = await Hive.openBox<String>('maps_raw');
 
+    // Persistence boxes for user data
+    await Hive.openBox<String>('loadouts_raw');
+    await Hive.openBox<String>('catches_raw');
+    await Hive.openBox<String>('sessions_raw');
+    await Hive.openBox<dynamic>('settings_box');
+
     final int currentVer = metaBox.get('dataset_version', defaultValue: 0);
 
     if (fishBox.isEmpty || currentVer < datasetVersion) {

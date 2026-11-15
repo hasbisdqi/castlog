@@ -200,7 +200,7 @@ class SessionSummaryScreen extends StatelessWidget {
               _buildStatsBlock(
                 catchesCount: session.catches.length,
                 speciesCount: uniqueSpecies,
-                durationFormatted: session.formattedDuration,
+                durationFormatted: session.formattedDurationShort,
               ),
               const SizedBox(height: 24),
 

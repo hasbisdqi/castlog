@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:castlog/models/gear_model.dart';
 import 'package:castlog/models/setup_model.dart';
 import 'package:castlog/services/gear_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class EditableRodSlot {
   final int id;
@@ -64,13 +66,45 @@ class TackleBoxController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadDefaultLoadouts();
+    _loadLoadouts();
   }
 
   @override
   void onClose() {
     nameController.dispose();
     super.onClose();
+  }
+
+  void _saveLoadoutsToStorage() {
+    try {
+      if (!Hive.isBoxOpen('loadouts_raw')) return;
+      final box = Hive.box<String>('loadouts_raw');
+      final jsonList = loadouts.map((l) => l.toJson()).toList();
+      box.put('loadouts_list', jsonEncode(jsonList));
+    } catch (_) {}
+  }
+
+  void _loadLoadouts() {
+    try {
+      if (Hive.isBoxOpen('loadouts_raw')) {
+        final box = Hive.box<String>('loadouts_raw');
+        final raw = box.get('loadouts_list');
+        if (raw != null && raw.isNotEmpty) {
+          final List<dynamic> list = jsonDecode(raw);
+          final loaded = list
+              .map((item) =>
+                  LoadoutModel.fromJson(Map<String, dynamic>.from(item as Map)))
+              .toList();
+          if (loaded.isNotEmpty) {
+            loadouts.assignAll(loaded);
+            return;
+          }
+        }
+      }
+    } catch (_) {}
+
+    _loadDefaultLoadouts();
+    _saveLoadoutsToStorage();
   }
 
   void _loadDefaultLoadouts() {
@@ -301,6 +335,12 @@ class TackleBoxController extends GetxController {
       ));
     }
 
+    _saveLoadoutsToStorage();
     return true;
+  }
+
+  void deleteLoadout(String id) {
+    loadouts.removeWhere((l) => l.id == id);
+    _saveLoadoutsToStorage();
   }
 }

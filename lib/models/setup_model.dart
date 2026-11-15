@@ -105,6 +105,41 @@ class RodSlotData {
 
     return list;
   }
+
+  Map<String, dynamic> toJson() => {
+        'slotIndex': slotIndex,
+        'type': type.index,
+        'rodName': rodName,
+        'rodLength': rodLength,
+        'rodImage': rodImage,
+        'reel': reel,
+        'line': line,
+        'leader': leader,
+        'weightOrFloat': weightOrFloat,
+        'hook': hook,
+        'baitOrLure': baitOrLure,
+      };
+
+  factory RodSlotData.fromJson(Map<String, dynamic> json) {
+    return RodSlotData(
+      slotIndex: json['slotIndex'] as int? ?? 1,
+      type: json['type'] is int
+          ? SetupType.values[json['type'] as int]
+          : SetupType.values.firstWhere(
+              (e) => e.name == json['type'],
+              orElse: () => SetupType.spinning,
+            ),
+      rodName: json['rodName'] as String? ?? '',
+      rodLength: json['rodLength'] as String? ?? '',
+      rodImage: json['rodImage'] as String?,
+      reel: json['reel'] as String?,
+      line: json['line'] as String?,
+      leader: json['leader'] as String?,
+      weightOrFloat: json['weightOrFloat'] as String?,
+      hook: json['hook'] as String?,
+      baitOrLure: json['baitOrLure'] as String? ?? '',
+    );
+  }
 }
 
 class LoadoutModel {
@@ -120,4 +155,21 @@ class LoadoutModel {
 
   String get subtitle =>
       '${rods.length} rod${rods.length > 1 ? "s" : ""} · Custom loadout';
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'rods': rods.map((r) => r.toJson()).toList(),
+      };
+
+  factory LoadoutModel.fromJson(Map<String, dynamic> json) {
+    return LoadoutModel(
+      id: json['id'] as String? ?? 'loadout_${DateTime.now().millisecondsSinceEpoch}',
+      name: json['name'] as String? ?? 'Custom Loadout',
+      rods: (json['rods'] as List<dynamic>?)
+              ?.map((r) => RodSlotData.fromJson(Map<String, dynamic>.from(r as Map)))
+              .toList() ??
+          [],
+    );
+  }
 }

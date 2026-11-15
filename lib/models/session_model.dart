@@ -104,6 +104,16 @@ class SessionModel {
     return '$minutes:$seconds';
   }
 
+  String get formattedDurationShort {
+    final d = duration;
+    if (d.inHours > 0) {
+      final mins = d.inMinutes % 60;
+      return mins > 0 ? '${d.inHours}h ${mins}m' : '${d.inHours}h';
+    }
+    final mins = d.inMinutes;
+    return mins > 0 ? '${mins}m' : '${d.inSeconds}s';
+  }
+
   double get totalWeightKg {
     return catches.fold(0.0, (sum, c) => sum + c.weightKg);
   }
@@ -111,5 +121,40 @@ class SessionModel {
   CatchModel? get biggestCatch {
     if (catches.isEmpty) return null;
     return catches.reduce((curr, next) => curr.weightKg > next.weightKg ? curr : next);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'waterwayName': waterwayName,
+        'waterwayRegion': waterwayRegion,
+        'waterwayImage': waterwayImage,
+        'loadout': loadout.toJson(),
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime?.toIso8601String(),
+        'isActive': isActive,
+        'catches': catches.map((c) => c.toJson()).toList(),
+      };
+
+  factory SessionModel.fromJson(Map<String, dynamic> json) {
+    return SessionModel(
+      id: json['id'] as String? ?? 'session_${DateTime.now().millisecondsSinceEpoch}',
+      waterwayName: json['waterwayName'] as String? ?? '',
+      waterwayRegion: json['waterwayRegion'] as String? ?? '',
+      waterwayImage: json['waterwayImage'] as String? ?? '',
+      loadout: json['loadout'] != null
+          ? LoadoutModel.fromJson(Map<String, dynamic>.from(json['loadout'] as Map))
+          : const LoadoutModel(id: 'loadout_default', name: 'Default', rods: []),
+      startTime: json['startTime'] != null
+          ? DateTime.parse(json['startTime'] as String)
+          : DateTime.now(),
+      endTime: json['endTime'] != null
+          ? DateTime.parse(json['endTime'] as String)
+          : null,
+      isActive: json['isActive'] as bool? ?? false,
+      catches: (json['catches'] as List<dynamic>?)
+              ?.map((c) => CatchModel.fromJson(Map<String, dynamic>.from(c as Map)))
+              .toList() ??
+          [],
+    );
   }
 }

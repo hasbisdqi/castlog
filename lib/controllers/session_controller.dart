@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/models/session_model.dart';
 import 'package:castlog/models/setup_model.dart';
 import 'package:castlog/models/waterway_model.dart';
 import 'package:castlog/services/waterway_service.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class SessionController extends GetxController {
   final WaterwayService _waterwayService = WaterwayService();
@@ -30,6 +32,7 @@ class SessionController extends GetxController {
 
   void setUserRegion(String region) {
     userRegion.value = region;
+    _saveSettingsToStorage();
   }
 
   List<WaterwayModel> get waterways => _waterwayService.getAllWaterways();
@@ -37,13 +40,112 @@ class SessionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _initDefaultSessionAndCatches();
+    _loadFromStorage();
   }
 
   @override
   void onClose() {
     _timer?.cancel();
     super.onClose();
+  }
+
+  void _loadFromStorage() {
+    try {
+      if (Hive.isBoxOpen('settings_box')) {
+        final sBox = Hive.box('settings_box');
+        final savedRegion = sBox.get('user_region');
+        if (savedRegion != null && savedRegion is String) {
+          userRegion.value = savedRegion;
+        }
+      }
+
+      bool loadedCatches = false;
+      if (Hive.isBoxOpen('catches_raw')) {
+        final cBox = Hive.box<String>('catches_raw');
+        final rawCatches = cBox.get('catches_list');
+        if (rawCatches != null && rawCatches.isNotEmpty) {
+          final List<dynamic> list = jsonDecode(rawCatches);
+          final items = list
+              .map((item) =>
+                  CatchModel.fromJson(Map<String, dynamic>.from(item as Map)))
+              .toList();
+          if (items.isNotEmpty) {
+            catches.assignAll(items);
+            loadedCatches = true;
+          }
+        }
+      }
+
+      bool loadedPastSessions = false;
+      bool hasActive = false;
+      if (Hive.isBoxOpen('sessions_raw')) {
+        final sBox = Hive.box<String>('sessions_raw');
+
+        // Past sessions
+        final rawPast = sBox.get('past_sessions_list');
+        if (rawPast != null && rawPast.isNotEmpty) {
+          final List<dynamic> list = jsonDecode(rawPast);
+          final items = list
+              .map((item) =>
+                  SessionModel.fromJson(Map<String, dynamic>.from(item as Map)))
+              .toList();
+          if (items.isNotEmpty) {
+            pastSessions.assignAll(items);
+            loadedPastSessions = true;
+          }
+        }
+
+        // Active session
+        final rawActive = sBox.get('active_session');
+        if (rawActive != null && rawActive.isNotEmpty) {
+          final map = jsonDecode(rawActive);
+          final session =
+              SessionModel.fromJson(Map<String, dynamic>.from(map as Map));
+          activeSession.value = session;
+          _startTimer();
+          hasActive = true;
+        }
+      }
+
+      if (!loadedCatches && !loadedPastSessions && !hasActive) {
+        _initDefaultSessionAndCatches();
+        _saveCatchesToStorage();
+        _saveSessionsToStorage();
+      }
+    } catch (_) {
+      _initDefaultSessionAndCatches();
+    }
+  }
+
+  void _saveCatchesToStorage() {
+    try {
+      if (!Hive.isBoxOpen('catches_raw')) return;
+      final box = Hive.box<String>('catches_raw');
+      final list = catches.map((c) => c.toJson()).toList();
+      box.put('catches_list', jsonEncode(list));
+    } catch (_) {}
+  }
+
+  void _saveSessionsToStorage() {
+    try {
+      if (!Hive.isBoxOpen('sessions_raw')) return;
+      final box = Hive.box<String>('sessions_raw');
+      if (activeSession.value != null) {
+        box.put('active_session', jsonEncode(activeSession.value!.toJson()));
+      } else {
+        box.delete('active_session');
+      }
+      final list = pastSessions.map((s) => s.toJson()).toList();
+      box.put('past_sessions_list', jsonEncode(list));
+    } catch (_) {}
+  }
+
+  void _saveSettingsToStorage() {
+    try {
+      if (!Hive.isBoxOpen('settings_box')) return;
+      final box = Hive.box('settings_box');
+      box.put('user_region', userRegion.value);
+    } catch (_) {}
   }
 
   void _initDefaultSessionAndCatches() {
@@ -211,6 +313,7 @@ class SessionController extends GetxController {
 
     activeSession.value = session;
     _startTimer();
+    _saveSessionsToStorage();
   }
 
   SessionModel? endCurrentSession() {
@@ -223,6 +326,7 @@ class SessionController extends GetxController {
     lastCompletedSession.value = session;
     activeSession.value = null;
     formattedTimer.value = '00:00';
+    _saveSessionsToStorage();
     return session;
   }
 
@@ -257,6 +361,8 @@ class SessionController extends GetxController {
       session.catches.insert(0, newCatch);
       activeSession.refresh();
     }
+    _saveCatchesToStorage();
+    _saveSessionsToStorage();
   }
 
   void deleteCatch(String id) {
@@ -265,6 +371,8 @@ class SessionController extends GetxController {
       activeSession.value!.catches.removeWhere((c) => c.id == id);
       activeSession.refresh();
     }
+    _saveCatchesToStorage();
+    _saveSessionsToStorage();
   }
 
   // Get species list available for current session waterway

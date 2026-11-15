@@ -402,7 +402,7 @@ class SessionsScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'catches · ${session.formattedDuration}',
+                  'catches · ${session.formattedDurationShort}',
                   style: GoogleFonts.dmSans(
                     fontSize: 10,
                     color: AppColors.muted,
