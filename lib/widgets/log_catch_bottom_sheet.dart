@@ -31,6 +31,7 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
 
   MapFishSpecies? _selectedSpecies;
   RodSlotData? _selectedRod;
+  String? _customImageUrl;
 
   @override
   void initState() {
@@ -137,6 +138,9 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Catch Screenshot Upload Box
+                  _buildImageUploadBox(),
+
                   // 1. SPECIES PICKER (Filtered to active location)
                   _buildSectionLabel('SPECIES (FOUND AT THIS WATERWAY)'),
                   Container(
@@ -372,12 +376,16 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
     final weight = double.tryParse(_weightController.text.trim()) ?? 1.5;
     final length = double.tryParse(_lengthController.text.trim()) ?? 40.0;
 
+    final chosenImage = (_customImageUrl != null && _customImageUrl!.isNotEmpty)
+        ? _customImageUrl
+        : (_selectedSpecies!.image.isNotEmpty ? _selectedSpecies!.image : null);
+
     sessionController.addCatch(
       species: _selectedSpecies!.name,
       weightKg: weight,
       lengthCm: length,
       rodSlot: _selectedRod!,
-      image: _selectedSpecies!.image.isNotEmpty ? _selectedSpecies!.image : null,
+      image: chosenImage,
       notes: _notesController.text.trim(),
     );
 
@@ -436,6 +444,349 @@ class _LogCatchBottomSheetState extends State<LogCatchBottomSheet> {
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.ink),
             borderRadius: BorderRadius.zero,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageUploadBox() {
+    const ColorFilter greyscaleFilter = ColorFilter.matrix(<double>[
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0.2126, 0.7152, 0.0722, 0, 0,
+      0,      0,      0,      1, 0,
+    ]);
+
+    if (_customImageUrl != null && _customImageUrl!.isNotEmpty) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 18),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.line),
+          color: AppColors.paper,
+        ),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                ColorFiltered(
+                  colorFilter: greyscaleFilter,
+                  child: Image.network(
+                    _customImageUrl!,
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 180,
+                      color: AppColors.soft,
+                      child: const Center(
+                        child: Icon(Icons.broken_image, color: AppColors.muted),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _customImageUrl = null;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: Colors.black54,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.close, size: 16, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Screenshot attached',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _showImagePickerModal,
+                    child: Text(
+                      'Change photo ↗',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.muted,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return GestureDetector(
+      onTap: _showImagePickerModal,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 18),
+        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+        decoration: BoxDecoration(
+          color: AppColors.paper,
+          border: Border.all(
+            color: const Color(0xFFC8C8C4),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(
+              '＋',
+              style: GoogleFonts.manrope(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.muted,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Add catch screenshot',
+              style: GoogleFonts.dmSans(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.ink,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Choose photo or preset catch snapshot',
+              style: GoogleFonts.dmSans(
+                fontSize: 11,
+                color: AppColors.muted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showImagePickerModal() {
+    final urlController = TextEditingController();
+
+    final presets = [
+      {
+        'title': 'Common Carp Catch',
+        'url': 'https://images.unsplash.com/photo-1535392432937-a27c36ec07b5?w=600&q=80',
+      },
+      {
+        'title': 'Grass Carp Snapshot',
+        'url': 'https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=600&q=80',
+      },
+      {
+        'title': 'Mirror Carp Trophy',
+        'url': 'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?w=600&q=80',
+      },
+      {
+        'title': 'Largemouth Bass Landing',
+        'url': 'https://images.unsplash.com/photo-1515003197210-e0cd7184f8b5?w=600&q=80',
+      },
+      {
+        'title': 'Pike Predator Moment',
+        'url': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80',
+      },
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          16,
+          20,
+          MediaQuery.of(ctx).viewInsets.bottom + 24,
+        ),
+        decoration: const BoxDecoration(
+          color: AppColors.bg,
+          border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Attach Catch Photo',
+                    style: GoogleFonts.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    icon: const Icon(Icons.close, size: 20),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Option 1: URL input
+              Text(
+                'ENTER IMAGE URL',
+                style: GoogleFonts.dmSans(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: AppColors.muted,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: AppColors.paper,
+                      child: TextField(
+                        controller: urlController,
+                        style: GoogleFonts.dmSans(fontSize: 12),
+                        decoration: const InputDecoration(
+                          hintText: 'https://...',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.zero),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      final url = urlController.text.trim();
+                      if (url.isNotEmpty) {
+                        setState(() {
+                          _customImageUrl = url;
+                        });
+                        Navigator.pop(ctx);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.dark,
+                      foregroundColor: Colors.white,
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    child: const Text('Attach'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Option 2: Presets
+              Text(
+                'PRESET CATCH PHOTOS',
+                style: GoogleFonts.dmSans(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: AppColors.muted,
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 110,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: presets.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  itemBuilder: (ctx, i) {
+                    final p = presets[i];
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _customImageUrl = p['url'];
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      child: Container(
+                        width: 110,
+                        decoration: BoxDecoration(
+                          color: AppColors.paper,
+                          border: Border.all(color: AppColors.line),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Image.network(
+                                p['url']!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image)),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: Text(
+                                p['title']!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.ink,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              if (_selectedSpecies != null && _selectedSpecies!.image.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        _customImageUrl = _selectedSpecies!.image;
+                      });
+                      Navigator.pop(ctx);
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.ink,
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: Text(
+                      'Use ${_selectedSpecies!.name} Illustration',
+                      style: GoogleFonts.dmSans(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),
