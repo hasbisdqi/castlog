@@ -1,15 +1,36 @@
+import 'package:castlog/models/session_model.dart';
+import 'package:castlog/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CatchCard extends StatelessWidget {
-  final Map<String, String> item;
+  final Map<String, String>? item;
+  final CatchModel? catchModel;
   final VoidCallback? onTap;
 
-  const CatchCard({super.key, required this.item, this.onTap});
+  const CatchCard({
+    super.key,
+    this.item,
+    this.catchModel,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final title = catchModel?.species ?? item?['title'] ?? '';
+    final sub = catchModel != null
+        ? '${catchModel!.waterway.split(" - ").first} · ${catchModel!.rodName}'
+        : (item?['sub'] ?? '');
+    final weight = catchModel?.weightFormatted ?? item?['weight'] ?? '';
+    final imageUrl = catchModel?.image ?? item?['image'] ?? '';
+
+    final handleTap = onTap ??
+        (catchModel != null
+            ? () => Get.toNamed(AppRoutes.catchDetail, arguments: catchModel)
+            : null);
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: handleTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -33,7 +54,7 @@ class CatchCard extends StatelessWidget {
                 },
                 blendMode: BlendMode.dstIn,
                 child: Image.network(
-                  item['image'] ?? '',
+                  imageUrl,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => Image.asset(
                     'assets/placeholder/fish.png',
@@ -48,7 +69,7 @@ class CatchCard extends StatelessWidget {
               top: 16,
               left: 16,
               child: Text(
-                item['weight'] ?? '',
+                weight,
                 style: const TextStyle(
                   fontFamily: 'monospace',
                   fontSize: 10,
@@ -66,7 +87,7 @@ class CatchCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    item['title'] ?? '',
+                    title,
                     style: const TextStyle(
                       fontFamily: 'monospace',
                       fontSize: 16,
@@ -78,7 +99,7 @@ class CatchCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item['sub'] ?? '',
+                    sub,
                     style: const TextStyle(
                       fontFamily: 'monospace',
                       fontSize: 10,

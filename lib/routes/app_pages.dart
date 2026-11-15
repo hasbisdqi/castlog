@@ -2,6 +2,7 @@ import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/layout.dart';
 import 'package:castlog/routes/app_routes.dart';
+import 'package:castlog/views/catch_detail_screen.dart';
 import 'package:castlog/views/setup_form_screen.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.setupForm,
       page: () => const SetupFormScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.catchDetail,
+      page: () => const CatchDetailScreen(),
     ),
   ];
 }

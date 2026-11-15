@@ -670,14 +670,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildRecentCatches(BuildContext context, SessionController controller) {
-    final list = controller.catches.take(6).map((c) {
-      return {
-        'title': c.species,
-        'sub': '${c.waterway.split(" - ").first} · ${c.rodName}',
-        'weight': c.weightFormatted,
-        'image': c.image ?? '',
-      };
-    }).toList();
+    final list = controller.catches.take(6).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -719,7 +712,7 @@ class HomeScreen extends StatelessWidget {
           ),
           itemCount: list.length,
           itemBuilder: (context, index) {
-            return CatchCard(item: list[index]);
+            return CatchCard(catchModel: list[index]);
           },
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:castlog/controllers/session_controller.dart';
+import 'package:castlog/models/session_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -79,7 +80,7 @@ class _JournalScreenState extends State<JournalScreen> {
     );
   }
 
-  List<Map<String, String>> _filterCatches(SessionController controller) {
+  List<CatchModel> _filterCatches(SessionController controller) {
     return controller.catches.where((c) {
       final matchesQuery = _searchQuery.isEmpty ||
           c.species.toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -90,13 +91,6 @@ class _JournalScreenState extends State<JournalScreen> {
 
       if (_selectedFilter == 'all') return true;
       return c.species.toLowerCase().contains(_selectedFilter);
-    }).map((c) {
-      return {
-        'title': c.species,
-        'sub': '${c.waterway.split(" - ").first} · ${c.rodName}',
-        'weight': c.weightFormatted,
-        'image': c.image ?? '',
-      };
     }).toList();
   }
 
@@ -289,7 +283,7 @@ class _JournalScreenState extends State<JournalScreen> {
     );
   }
 
-  Widget _buildCatchGrid(List<Map<String, String>> catches) {
+  Widget _buildCatchGrid(List<CatchModel> catches) {
     if (catches.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(32),
@@ -328,7 +322,7 @@ class _JournalScreenState extends State<JournalScreen> {
       ),
       itemCount: catches.length,
       itemBuilder: (context, index) {
-        return CatchCard(item: catches[index]);
+        return CatchCard(catchModel: catches[index]);
       },
     );
   }

@@ -178,6 +178,14 @@ class SessionController extends GetxController {
     }
   }
 
+  void deleteCatch(String id) {
+    catches.removeWhere((c) => c.id == id);
+    if (activeSession.value != null) {
+      activeSession.value!.catches.removeWhere((c) => c.id == id);
+      activeSession.refresh();
+    }
+  }
+
   // Get species list available for current session waterway
   List<MapFishSpecies> getCurrentWaterwaySpecies() {
     final all = _waterwayService.getAllWaterways();
