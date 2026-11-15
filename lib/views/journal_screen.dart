@@ -1,11 +1,20 @@
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/models/session_model.dart';
 import 'package:castlog/routes/app_routes.dart';
+import 'package:castlog/theme/app_colors.dart';
+import 'package:castlog/widgets/catch_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:castlog/theme/app_colors.dart';
-import 'package:castlog/widgets/catch_card.dart';
+
+enum JournalSort {
+  newest('Newest first ↓'),
+  heaviest('Heaviest first ↓'),
+  oldest('Oldest first ↑');
+
+  final String label;
+  const JournalSort(this.label);
+}
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -17,19 +26,32 @@ class JournalScreen extends StatefulWidget {
 class _JournalScreenState extends State<JournalScreen> {
   String _selectedFilter = 'all';
   String _searchQuery = '';
+  JournalSort _currentSort = JournalSort.newest;
   final TextEditingController _searchController = TextEditingController();
 
   final List<Map<String, String>> _filters = [
     {'id': 'all', 'label': 'All catches'},
     {'id': 'carp', 'label': 'Carp'},
     {'id': 'bass', 'label': 'Bass'},
-    {'id': 'trout', 'label': 'Trout'},
+    {'id': 'recent', 'label': 'Recent'},
   ];
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _toggleSort() {
+    setState(() {
+      if (_currentSort == JournalSort.newest) {
+        _currentSort = JournalSort.heaviest;
+      } else if (_currentSort == JournalSort.heaviest) {
+        _currentSort = JournalSort.oldest;
+      } else {
+        _currentSort = JournalSort.newest;
+      }
+    });
   }
 
   @override
@@ -61,7 +83,7 @@ class _JournalScreenState extends State<JournalScreen> {
                     _buildFilterPills(),
                     const SizedBox(height: 24),
                     Obx(() {
-                      final items = _filterCatches(sessionController);
+                      final items = _filterAndSortCatches(sessionController);
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -81,18 +103,47 @@ class _JournalScreenState extends State<JournalScreen> {
     );
   }
 
-  List<CatchModel> _filterCatches(SessionController controller) {
-    return controller.catches.where((c) {
-      final matchesQuery = _searchQuery.isEmpty ||
-          c.species.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          c.waterway.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          c.rodName.toLowerCase().contains(_searchQuery.toLowerCase());
+  List<CatchModel> _filterAndSortCatches(SessionController controller) {
+    final now = DateTime.now();
+
+    final filtered = controller.catches.where((c) {
+      final query = _searchQuery.toLowerCase().trim();
+      final matchesQuery = query.isEmpty ||
+          c.species.toLowerCase().contains(query) ||
+          c.waterway.toLowerCase().contains(query) ||
+          c.rodName.toLowerCase().contains(query) ||
+          (c.baitOrLure != null && c.baitOrLure!.toLowerCase().contains(query)) ||
+          (c.notes != null && c.notes!.toLowerCase().contains(query));
 
       if (!matchesQuery) return false;
 
       if (_selectedFilter == 'all') return true;
-      return c.species.toLowerCase().contains(_selectedFilter);
+      if (_selectedFilter == 'carp') {
+        return c.species.toLowerCase().contains('carp');
+      }
+      if (_selectedFilter == 'bass') {
+        return c.species.toLowerCase().contains('bass');
+      }
+      if (_selectedFilter == 'recent') {
+        return now.difference(c.timestamp).inDays <= 7;
+      }
+      return true;
     }).toList();
+
+    // Sorting
+    switch (_currentSort) {
+      case JournalSort.newest:
+        filtered.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+        break;
+      case JournalSort.heaviest:
+        filtered.sort((a, b) => b.weightKg.compareTo(a.weightKg));
+        break;
+      case JournalSort.oldest:
+        filtered.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        break;
+    }
+
+    return filtered;
   }
 
   Widget _buildTopBar(BuildContext context) {
@@ -141,7 +192,7 @@ class _JournalScreenState extends State<JournalScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'YOUR ARCHIVE',
+          'THE ARCHIVE',
           style: GoogleFonts.dmSans(
             fontSize: 10,
             fontWeight: FontWeight.w700,
@@ -151,7 +202,7 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
         const SizedBox(height: 10),
         Text(
-          'Journal.',
+          'Your catches.',
           style: GoogleFonts.manrope(
             fontSize: 38,
             fontWeight: FontWeight.w600,
@@ -162,10 +213,10 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
         const SizedBox(height: 10),
         Text(
-          'A permanent, personal record of every single fish brought to hand.',
+          'A collection of moments from every session.',
           style: GoogleFonts.dmSans(
             fontSize: 13,
-            height: 1.7,
+            height: 1.6,
             color: AppColors.muted,
           ),
         ),
@@ -192,7 +243,7 @@ class _JournalScreenState extends State<JournalScreen> {
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
-          hintText: 'Search catches by species, water, rod...',
+          hintText: 'Search species or location...',
           hintStyle: GoogleFonts.dmSans(fontSize: 13, color: AppColors.muted),
           prefixIcon: const Icon(
             Icons.search,
@@ -281,6 +332,25 @@ class _JournalScreenState extends State<JournalScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+        GestureDetector(
+          onTap: _toggleSort,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.soft,
+              border: Border.all(color: AppColors.line),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              _currentSort.label,
+              style: GoogleFonts.dmSans(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: AppColors.ink,
+              ),
+            ),
           ),
         ),
       ],

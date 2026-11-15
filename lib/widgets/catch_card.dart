@@ -15,11 +15,28 @@ class CatchCard extends StatelessWidget {
     this.onTap,
   });
 
+  String _formatRelativeDate(DateTime dt) {
+    final now = DateTime.now();
+    final difference = now.difference(dt);
+    if (difference.inDays == 0) {
+      return 'Today';
+    } else if (difference.inDays == 1) {
+      return 'Yesterday';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays < 14) {
+      return '1 week ago';
+    } else {
+      final weeks = (difference.inDays / 7).floor();
+      return '$weeks week${weeks > 1 ? "s" : ""} ago';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = catchModel?.species ?? item?['title'] ?? '';
     final sub = catchModel != null
-        ? '${catchModel!.waterway.split(" - ").first} · ${catchModel!.rodName}'
+        ? '${catchModel!.waterway.split(" - ").first} · ${_formatRelativeDate(catchModel!.timestamp)}'
         : (item?['sub'] ?? '');
     final weight = catchModel?.weightFormatted ?? item?['weight'] ?? '';
     final imageUrl = catchModel?.image ?? item?['image'] ?? '';
