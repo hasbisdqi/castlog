@@ -101,6 +101,70 @@ class SessionController extends GetxController {
 
     activeSession.value = session;
     _startTimer();
+
+    // Initial sample past sessions
+    pastSessions.assignAll([
+      SessionModel(
+        id: 'session_past_1',
+        waterwayName: 'Emerald Lake - New York',
+        waterwayRegion: 'North America',
+        waterwayImage: 'https://wiki.fishingplanet.com/images/5/56/LoneStarLake.jpg',
+        loadout: defaultLoadout,
+        startTime: DateTime.now().subtract(const Duration(days: 2, hours: 3, minutes: 20)),
+        endTime: DateTime.now().subtract(const Duration(days: 2)),
+        isActive: false,
+        catches: [
+          CatchModel(
+            id: 'catch_p1',
+            species: 'Chain Pickerel',
+            waterway: 'Emerald Lake - New York',
+            weightKg: 2.1,
+            lengthCm: 55,
+            rodName: 'MagFin™ JigWinner',
+            rodType: SetupType.spinning,
+            baitOrLure: 'Shad 10 cm',
+            image: 'https://wiki.fishingplanet.com/images/thumb/6/6c/Chain_Pickerel.png/300px-Chain_Pickerel.png',
+            timestamp: DateTime.now().subtract(const Duration(days: 2, hours: 2)),
+          ),
+          CatchModel(
+            id: 'catch_p2',
+            species: 'Walleye',
+            waterway: 'Emerald Lake - New York',
+            weightKg: 3.4,
+            lengthCm: 66,
+            rodName: 'MagFin™ JigWinner',
+            rodType: SetupType.spinning,
+            baitOrLure: 'Narrow Spoon 7g',
+            image: 'https://wiki.fishingplanet.com/images/thumb/0/05/Walleye.png/300px-Walleye.png',
+            timestamp: DateTime.now().subtract(const Duration(days: 2, hours: 1)),
+          ),
+        ],
+      ),
+      SessionModel(
+        id: 'session_past_2',
+        waterwayName: 'Lone Star Lake - Texas',
+        waterwayRegion: 'North America',
+        waterwayImage: 'https://wiki.fishingplanet.com/images/5/56/LoneStarLake.jpg',
+        loadout: defaultLoadout,
+        startTime: DateTime.now().subtract(const Duration(days: 5, hours: 2, minutes: 10)),
+        endTime: DateTime.now().subtract(const Duration(days: 5)),
+        isActive: false,
+        catches: [
+          CatchModel(
+            id: 'catch_p3',
+            species: 'Spotted Bass',
+            waterway: 'Lone Star Lake - Texas',
+            weightKg: 1.8,
+            lengthCm: 44,
+            rodName: 'ValueSpin',
+            rodType: SetupType.spinning,
+            baitOrLure: 'Redworm',
+            image: 'https://wiki.fishingplanet.com/images/thumb/7/7d/Spotted_Bass.png/300px-Spotted_Bass.png',
+            timestamp: DateTime.now().subtract(const Duration(days: 5, hours: 1)),
+          ),
+        ],
+      ),
+    ]);
   }
 
   void _startTimer() {

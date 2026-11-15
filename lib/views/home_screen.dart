@@ -526,23 +526,26 @@ class HomeScreen extends StatelessWidget {
       children: [
         Expanded(
           child: _buildSecondaryButton(
-            text: '＋ Log catch',
-            onTap: () {
-              if (controller.activeSession.value == null) {
-                StartSessionBottomSheet.show(context);
-              } else {
-                LogCatchBottomSheet.show(context);
-              }
-            },
+            text: 'All sessions',
+            icon: '↗',
+            onTap: () => Get.toNamed(AppRoutes.sessions),
           ),
         ),
         const SizedBox(width: 9),
         Expanded(
-          child: _buildSecondaryButton(
-            text: 'Change session',
-            icon: '↗',
-            onTap: () => StartSessionBottomSheet.show(context),
-          ),
+          child: Obx(() {
+            final hasActive = controller.activeSession.value != null;
+            return _buildSecondaryButton(
+              text: hasActive ? '＋ Log catch' : '＋ New session',
+              onTap: () {
+                if (hasActive) {
+                  LogCatchBottomSheet.show(context);
+                } else {
+                  StartSessionBottomSheet.show(context);
+                }
+              },
+            );
+          }),
         ),
       ],
     );

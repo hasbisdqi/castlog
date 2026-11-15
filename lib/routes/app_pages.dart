@@ -5,6 +5,7 @@ import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/views/active_session_screen.dart';
 import 'package:castlog/views/catch_detail_screen.dart';
 import 'package:castlog/views/session_summary_screen.dart';
+import 'package:castlog/views/sessions_screen.dart';
 import 'package:castlog/views/setup_form_screen.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.sessionSummary,
       page: () => const SessionSummaryScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.sessions,
+      page: () => const SessionsScreen(),
     ),
   ];
 }
