@@ -18,6 +18,7 @@ import 'package:castlog/views/register_screen.dart';
 import 'package:castlog/views/session_summary_screen.dart';
 import 'package:castlog/views/sessions_screen.dart';
 import 'package:castlog/views/setup_form_screen.dart';
+import 'package:castlog/views/splash_screen.dart';
 import 'package:get/get.dart';
 
 class MainBinding extends Bindings {
@@ -32,6 +33,11 @@ class MainBinding extends Bindings {
 
 class AppPages {
   static final routes = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+      binding: MainBinding(),
+    ),
     GetPage(
       name: AppRoutes.home,
       page: () => const Layout(),

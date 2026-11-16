@@ -2,6 +2,7 @@ import 'package:castlog/controllers/navigation_controller.dart';
 import 'package:castlog/controllers/session_controller.dart';
 import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
+import 'package:castlog/widgets/castlog_logo.dart';
 import 'package:castlog/widgets/catch_card.dart';
 import 'package:castlog/widgets/log_catch_bottom_sheet.dart';
 import 'package:castlog/widgets/start_session_bottom_sheet.dart';
@@ -58,23 +59,7 @@ class HomeScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RichText(
-          text: TextSpan(
-            style: GoogleFonts.manrope(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: AppColors.ink,
-              letterSpacing: -1.2,
-            ),
-            children: const [
-              TextSpan(text: 'cast'),
-              TextSpan(
-                text: 'log.',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
-        ),
+        const CastlogLogo(size: 22),
         GestureDetector(
           onTap: () => Get.toNamed(AppRoutes.profile),
           child: Container(

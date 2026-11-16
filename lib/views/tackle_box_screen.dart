@@ -2,6 +2,7 @@ import 'package:castlog/controllers/tackle_box_controller.dart';
 import 'package:castlog/models/setup_model.dart';
 import 'package:castlog/routes/app_routes.dart';
 import 'package:castlog/theme/app_colors.dart';
+import 'package:castlog/widgets/castlog_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,23 +56,7 @@ class TackleBoxScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RichText(
-          text: TextSpan(
-            style: GoogleFonts.manrope(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: AppColors.ink,
-              letterSpacing: -1.2,
-            ),
-            children: const [
-              TextSpan(text: 'cast'),
-              TextSpan(
-                text: 'log.',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
-        ),
+        const CastlogLogo(size: 22),
         GestureDetector(
           onTap: () => Get.toNamed(AppRoutes.profile),
           child: Container(
